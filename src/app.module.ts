@@ -14,6 +14,7 @@ import { CurrencyModule } from './currency/currency.module';
 import { DocumentModule } from './document/document.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { ContactModule } from './contact/contact.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ContactModule } from './contact/contact.module';
     DocumentModule,
     TransactionModule,
     ContactModule,
+    AuthenticationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
