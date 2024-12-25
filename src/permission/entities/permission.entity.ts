@@ -17,6 +17,9 @@ export class Permission {
   @Column()
   slug: string;
 
+  @Column({ type: 'text', nullable: true })
+  description?: string;
+
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 

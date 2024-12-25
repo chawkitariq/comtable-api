@@ -18,7 +18,7 @@ export class Role {
   slug: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description?: string;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
