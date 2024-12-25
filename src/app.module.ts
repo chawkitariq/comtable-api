@@ -8,9 +8,10 @@ import { TaxModule } from './tax/tax.module';
 import { CompanyModule } from './company/company.module';
 import { NotificationModule } from './notification/notification.module';
 import { CategoryModule } from './category/category.module';
+import { RoleModule } from './role/role.module';
 
 @Module({
-  imports: [DatabaseModule, UserModule, SettingModule, TaxModule, CompanyModule, NotificationModule, CategoryModule],
+  imports: [DatabaseModule, UserModule, SettingModule, TaxModule, CompanyModule, NotificationModule, CategoryModule, RoleModule],
   controllers: [AppController],
   providers: [AppService],
 })
