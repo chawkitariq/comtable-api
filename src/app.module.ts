@@ -12,6 +12,7 @@ import { RoleModule } from './role/role.module';
 import { PermissionModule } from './permission/permission.module';
 import { CurrencyModule } from './currency/currency.module';
 import { DocumentModule } from './document/document.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { DocumentModule } from './document/document.module';
     PermissionModule,
     CurrencyModule,
     DocumentModule,
+    TransactionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
