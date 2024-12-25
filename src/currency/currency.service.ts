@@ -12,15 +12,15 @@ export class CurrencyService {
     return `This action returns all currency`;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} currency`;
   }
 
-  update(id: number, updateCurrencyDto: UpdateCurrencyDto) {
+  update(id: string, updateCurrencyDto: UpdateCurrencyDto) {
     return `This action updates a #${id} currency`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} currency`;
   }
 }

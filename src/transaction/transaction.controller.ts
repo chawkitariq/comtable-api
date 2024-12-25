@@ -27,7 +27,7 @@ export class TransactionController {
 
   @Get(':transaction')
   findOne(@Param('transaction') id: string) {
-    return this.transactionService.findOne(+id);
+    return this.transactionService.findOne(id);
   }
 
   @Patch(':transaction')
@@ -35,11 +35,11 @@ export class TransactionController {
     @Param('transaction') id: string,
     @Body() updateTransactionDto: UpdateTransactionDto,
   ) {
-    return this.transactionService.update(+id, updateTransactionDto);
+    return this.transactionService.update(id, updateTransactionDto);
   }
 
   @Delete(':transaction')
   remove(@Param('transaction') id: string) {
-    return this.transactionService.remove(+id);
+    return this.transactionService.remove(id);
   }
 }

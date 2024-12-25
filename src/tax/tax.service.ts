@@ -12,15 +12,15 @@ export class TaxService {
     return `This action returns all tax`;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} tax`;
   }
 
-  update(id: number, updateTaxDto: UpdateTaxDto) {
+  update(id: string, updateTaxDto: UpdateTaxDto) {
     return `This action updates a #${id} tax`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} tax`;
   }
 }

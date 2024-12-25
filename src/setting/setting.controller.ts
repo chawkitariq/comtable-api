@@ -27,7 +27,7 @@ export class SettingController {
 
   @Get(':setting')
   findOne(@Param('setting') id: string) {
-    return this.settingService.findOne(+id);
+    return this.settingService.findOne(id);
   }
 
   @Patch(':setting')
@@ -35,11 +35,11 @@ export class SettingController {
     @Param('setting') id: string,
     @Body() updateSettingDto: UpdateSettingDto,
   ) {
-    return this.settingService.update(+id, updateSettingDto);
+    return this.settingService.update(id, updateSettingDto);
   }
 
   @Delete(':setting')
   remove(@Param('setting') id: string) {
-    return this.settingService.remove(+id);
+    return this.settingService.remove(id);
   }
 }

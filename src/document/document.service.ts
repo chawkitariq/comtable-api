@@ -12,15 +12,15 @@ export class DocumentService {
     return `This action returns all document`;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} document`;
   }
 
-  update(id: number, updateDocumentDto: UpdateDocumentDto) {
+  update(id: string, updateDocumentDto: UpdateDocumentDto) {
     return `This action updates a #${id} document`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} document`;
   }
 }

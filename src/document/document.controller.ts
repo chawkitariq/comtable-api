@@ -27,7 +27,7 @@ export class DocumentController {
 
   @Get(':document')
   findOne(@Param('document') id: string) {
-    return this.documentService.findOne(+id);
+    return this.documentService.findOne(id);
   }
 
   @Patch(':document')
@@ -35,11 +35,11 @@ export class DocumentController {
     @Param('document') id: string,
     @Body() updateDocumentDto: UpdateDocumentDto,
   ) {
-    return this.documentService.update(+id, updateDocumentDto);
+    return this.documentService.update(id, updateDocumentDto);
   }
 
   @Delete(':document')
   remove(@Param('document') id: string) {
-    return this.documentService.remove(+id);
+    return this.documentService.remove(id);
   }
 }

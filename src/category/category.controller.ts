@@ -27,7 +27,7 @@ export class CategoryController {
 
   @Get(':category')
   findOne(@Param('category') id: string) {
-    return this.categoryService.findOne(+id);
+    return this.categoryService.findOne(id);
   }
 
   @Patch(':category')
@@ -35,11 +35,11 @@ export class CategoryController {
     @Param('category') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.categoryService.update(+id, updateCategoryDto);
+    return this.categoryService.update(id, updateCategoryDto);
   }
 
   @Delete(':category')
   remove(@Param('category') id: string) {
-    return this.categoryService.remove(+id);
+    return this.categoryService.remove(id);
   }
 }

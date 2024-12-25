@@ -27,16 +27,16 @@ export class TaxController {
 
   @Get(':tax')
   findOne(@Param('tax') id: string) {
-    return this.taxService.findOne(+id);
+    return this.taxService.findOne(id);
   }
 
   @Patch(':tax')
   update(@Param('tax') id: string, @Body() updateTaxDto: UpdateTaxDto) {
-    return this.taxService.update(+id, updateTaxDto);
+    return this.taxService.update(id, updateTaxDto);
   }
 
   @Delete(':tax')
   remove(@Param('tax') id: string) {
-    return this.taxService.remove(+id);
+    return this.taxService.remove(id);
   }
 }

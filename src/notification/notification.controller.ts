@@ -27,7 +27,7 @@ export class NotificationController {
 
   @Get(':notification')
   findOne(@Param('notification') id: string) {
-    return this.notificationService.findOne(+id);
+    return this.notificationService.findOne(id);
   }
 
   @Patch(':notification')
@@ -35,11 +35,11 @@ export class NotificationController {
     @Param('notification') id: string,
     @Body() updateNotificationDto: UpdateNotificationDto,
   ) {
-    return this.notificationService.update(+id, updateNotificationDto);
+    return this.notificationService.update(id, updateNotificationDto);
   }
 
   @Delete(':notification')
   remove(@Param('notification') id: string) {
-    return this.notificationService.remove(+id);
+    return this.notificationService.remove(id);
   }
 }

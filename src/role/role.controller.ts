@@ -27,16 +27,16 @@ export class RoleController {
 
   @Get(':role')
   findOne(@Param('role') id: string) {
-    return this.roleService.findOne(+id);
+    return this.roleService.findOne(id);
   }
 
   @Patch(':role')
   update(@Param('role') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.roleService.update(+id, updateRoleDto);
+    return this.roleService.update(id, updateRoleDto);
   }
 
   @Delete(':role')
   remove(@Param('role') id: string) {
-    return this.roleService.remove(+id);
+    return this.roleService.remove(id);
   }
 }
