@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:17.2
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - "db:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_USER: comtable
+      POSTGRES_PASSWORD: comtable
+      POSTGRES_DATABASE: comtable
+
+  api:
+    image: node:22.12.0
+    working_dir: /home/node/api
+    user: node
+    volumes:
+      - "./:/home/node/api"
+    ports:
+      - "3000:3000"
+    command: npm run start:dev
+    depends_on:
+      - db
+
+volumes:
+  db:
