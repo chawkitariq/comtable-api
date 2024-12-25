@@ -8,3 +8,7 @@ ENV PATH=$PATH:/home/node/.npm-global/bin
 RUN npm i -g @nestjs/cli
 
 WORKDIR /home/node/api
+
+COPY --chmod=777 ./docker-entrypoint.sh /usr/local/bin
+
+ENTRYPOINT [ "docker-entrypoint.sh" ]
