@@ -1,6 +1,6 @@
 # Comtable API
 
-The **Comtable API** repository is the backend API for the [Comtable web application](https://github.com/chawkitariq/vbcard-app). It provides API endpoints for managing accounting business.
+The **Comtable API** repository is the backend API for the [Comtable web application](https://github.com/chawkitariq/comtable-web) (COMING SOON). It provides API endpoints for managing accounting business.
 
 ## Setup
 
