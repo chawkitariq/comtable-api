@@ -1,9 +1,13 @@
+import { Company } from 'src/company/entities/company.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
+  Relation,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -47,6 +51,10 @@ export class Contact {
 
   @Column({ name: 'currency_code', nullable: true })
   currencyCode?: string;
+
+  @ManyToOne(() => Company, { nullable: true })
+  @JoinColumn({ name: 'company_id' })
+  company?: Relation<Company>;
 
   @Column({ name: 'disabled_at', type: 'timestamptz', nullable: true })
   disabledAt?: Date;
