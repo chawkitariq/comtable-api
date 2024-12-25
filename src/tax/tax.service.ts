@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTaxDto } from './dto/create-tax.dto';
 import { UpdateTaxDto } from './dto/update-tax.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Tax } from './entities/tax.entity';
 
 @Injectable()
 export class TaxService {
-  create(createTaxDto: CreateTaxDto) {
-    return 'This action adds a new tax';
+  constructor(
+    @InjectRepository(Tax)
+    public readonly taxRepository: Repository<Tax>,
+  ) {}
+
+  create(dto: CreateTaxDto) {
+    return this.taxRepository.save(dto);
   }
 
   findAll() {
-    return `This action returns all tax`;
+    return this.taxRepository.find();
   }
 
   findOne(id: string) {
-    return `This action returns a #${id} tax`;
+    return this.taxRepository.findOne({ where: { id } });
   }
 
-  update(id: string, updateTaxDto: UpdateTaxDto) {
-    return `This action updates a #${id} tax`;
+  update(id: string, dto: UpdateTaxDto) {
+    return this.taxRepository.update(id, dto);
   }
 
   remove(id: string) {
-    return `This action removes a #${id} tax`;
+    return this.taxRepository.softDelete(id);
   }
 }

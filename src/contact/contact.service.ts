@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Contact } from './entities/contact.entity';
 
 @Injectable()
 export class ContactService {
-  create(createContactDto: CreateContactDto) {
-    return 'This action adds a new contact';
+  constructor(
+    @InjectRepository(Contact)
+    public readonly contactRepository: Repository<Contact>,
+  ) {}
+
+  create(dto: CreateContactDto) {
+    return this.contactRepository.save(dto);
   }
 
   findAll() {
-    return `This action returns all contact`;
+    return this.contactRepository.find();
   }
 
   findOne(id: string) {
-    return `This action returns a #${id} contact`;
+    return this.contactRepository.findOne({ where: { id } });
   }
 
-  update(id: string, updateContactDto: UpdateContactDto) {
-    return `This action updates a #${id} contact`;
+  update(id: string, dto: UpdateContactDto) {
+    return this.contactRepository.update(id, dto);
   }
 
   remove(id: string) {
-    return `This action removes a #${id} contact`;
+    return this.contactRepository.softDelete(id);
   }
 }

@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { Transaction } from './entities/transaction.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TransactionService {
-  create(createTransactionDto: CreateTransactionDto) {
-    return 'This action adds a new transaction';
+  constructor(
+    @InjectRepository(Transaction)
+    public readonly transactionRepository: Repository<Transaction>,
+  ) {}
+
+  create(dto: CreateTransactionDto) {
+    return this.transactionRepository.save(dto);
   }
 
   findAll() {
-    return `This action returns all transaction`;
+    return this.transactionRepository.find();
   }
 
   findOne(id: string) {
-    return `This action returns a #${id} transaction`;
+    return this.transactionRepository.findOne({ where: { id } });
   }
 
-  update(id: string, updateTransactionDto: UpdateTransactionDto) {
-    return `This action updates a #${id} transaction`;
+  update(id: string, dto: UpdateTransactionDto) {
+    return this.transactionRepository.update(id, dto);
   }
 
   remove(id: string) {
-    return `This action removes a #${id} transaction`;
+    return this.transactionRepository.softDelete(id);
   }
 }
