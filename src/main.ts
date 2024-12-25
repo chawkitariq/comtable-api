@@ -7,10 +7,9 @@ async function bootstrap() {
 
   if (process.env.APP_ENV !== 'production') {
     const config = new DocumentBuilder()
-      .setTitle('Cats example')
-      .setDescription('The cats API description')
+      .setTitle('Comtable Api')
+      .setDescription('The comtable Api documentation')
       .setVersion('1.0')
-      .addTag('cats')
       .build();
     const documentFactory = () => SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('swagger', app, documentFactory);
