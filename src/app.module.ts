@@ -16,6 +16,7 @@ import { TransactionModule } from './transaction/transaction.module';
 import { ContactModule } from './contact/contact.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { AuthorizationModule } from './authorization/authorization.module';
+import { AccountModule } from './account/account.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { AuthorizationModule } from './authorization/authorization.module';
     ContactModule,
     AuthenticationModule,
     AuthorizationModule,
+    AccountModule,
   ],
   controllers: [AppController],
   providers: [AppService],
