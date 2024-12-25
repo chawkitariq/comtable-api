@@ -10,10 +10,21 @@ import { NotificationModule } from './notification/notification.module';
 import { CategoryModule } from './category/category.module';
 import { RoleModule } from './role/role.module';
 import { PermissionModule } from './permission/permission.module';
-import { CurrenyModule } from './curreny/curreny.module';
+import { CurrencyModule } from './currency/currency.module';
 
 @Module({
-  imports: [DatabaseModule, UserModule, SettingModule, TaxModule, CompanyModule, NotificationModule, CategoryModule, RoleModule, PermissionModule, CurrenyModule],
+  imports: [
+    DatabaseModule,
+    UserModule,
+    SettingModule,
+    TaxModule,
+    CompanyModule,
+    NotificationModule,
+    CategoryModule,
+    RoleModule,
+    PermissionModule,
+    CurrencyModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

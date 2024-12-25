@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'currencies' })
-export class Curreny {
+export class Currency {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
