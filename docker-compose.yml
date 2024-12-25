@@ -12,9 +12,7 @@ services:
       POSTGRES_DATABASE: comtable
 
   api:
-    image: node:22.12.0
-    working_dir: /home/node/api
-    user: node
+    build: .
     volumes:
       - "./:/home/node/api"
     ports:
