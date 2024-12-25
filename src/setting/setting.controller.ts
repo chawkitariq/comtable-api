@@ -1,9 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { SettingService } from './setting.service';
 import { CreateSettingDto } from './dto/create-setting.dto';
 import { UpdateSettingDto } from './dto/update-setting.dto';
 
-@Controller('setting')
+@Controller('settings')
 export class SettingController {
   constructor(private readonly settingService: SettingService) {}
 
@@ -17,18 +25,21 @@ export class SettingController {
     return this.settingService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(':setting')
+  findOne(@Param('setting') id: string) {
     return this.settingService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSettingDto: UpdateSettingDto) {
+  @Patch(':setting')
+  update(
+    @Param('setting') id: string,
+    @Body() updateSettingDto: UpdateSettingDto,
+  ) {
     return this.settingService.update(+id, updateSettingDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(':setting')
+  remove(@Param('setting') id: string) {
     return this.settingService.remove(+id);
   }
 }
