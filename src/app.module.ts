@@ -13,6 +13,7 @@ import { PermissionModule } from './permission/permission.module';
 import { CurrencyModule } from './currency/currency.module';
 import { DocumentModule } from './document/document.module';
 import { TransactionModule } from './transaction/transaction.module';
+import { ContactModule } from './contact/contact.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { TransactionModule } from './transaction/transaction.module';
     CurrencyModule,
     DocumentModule,
     TransactionModule,
+    ContactModule,
   ],
   controllers: [AppController],
   providers: [AppService],
