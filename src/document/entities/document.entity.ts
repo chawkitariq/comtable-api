@@ -66,6 +66,18 @@ export class Document {
   @Column({ type: 'text', nullable: true })
   footer?: string;
 
+  @Column({ nullable: true })
+  title?: string;
+
+  @Column({ name: 'sub_title', nullable: true })
+  subTitle?: string;
+
+  @Column({ nullable: true })
+  template?: string;
+
+  @Column({ nullable: true })
+  color?: string;
+
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 
