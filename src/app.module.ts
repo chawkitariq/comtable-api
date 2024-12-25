@@ -7,9 +7,10 @@ import { SettingModule } from './setting/setting.module';
 import { TaxModule } from './tax/tax.module';
 import { CompanyModule } from './company/company.module';
 import { NotificationModule } from './notification/notification.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
-  imports: [DatabaseModule, UserModule, SettingModule, TaxModule, CompanyModule, NotificationModule],
+  imports: [DatabaseModule, UserModule, SettingModule, TaxModule, CompanyModule, NotificationModule, CategoryModule],
   controllers: [AppController],
   providers: [AppService],
 })
