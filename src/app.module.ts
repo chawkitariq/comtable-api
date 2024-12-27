@@ -21,6 +21,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { InvoiceModule } from './invoice/invoice.module';
 import { BillModule } from './bill/bill.module';
 import { ArticleModule } from './article/article.module';
+import { DocumentArticleModule } from './document-article/document-article.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { ArticleModule } from './article/article.module';
     InvoiceModule,
     BillModule,
     ArticleModule,
+    DocumentArticleModule,
   ],
   controllers: [AppController],
   providers: [
