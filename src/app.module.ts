@@ -18,6 +18,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { AccountModule } from './account/account.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { InvoiceModule } from './invoice/invoice.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     AuthenticationModule,
     AuthorizationModule,
     AccountModule,
+    InvoiceModule,
   ],
   controllers: [AppController],
   providers: [
