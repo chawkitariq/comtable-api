@@ -24,6 +24,10 @@ export class UserService {
     return this.userRepository.findOne({ where: { id } });
   }
 
+  findOneByEmail(email: string) {
+    return this.userRepository.findOne({ where: { email } });
+  }
+
   update(id: string, dto: UpdateUserDto) {
     return this.userRepository.update(id, dto);
   }
