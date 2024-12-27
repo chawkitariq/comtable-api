@@ -23,6 +23,7 @@ import { BillModule } from './bill/bill.module';
 import { ArticleModule } from './article/article.module';
 import { DocumentArticleModule } from './document-article/document-article.module';
 import { DocumentArticleTaxModule } from './document-article-tax/document-article-tax.module';
+import { DocumentTotalModule } from './document-total/document-total.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { DocumentArticleTaxModule } from './document-article-tax/document-articl
     ArticleModule,
     DocumentArticleModule,
     DocumentArticleTaxModule,
+    DocumentTotalModule,
   ],
   controllers: [AppController],
   providers: [
