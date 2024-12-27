@@ -22,6 +22,7 @@ import { InvoiceModule } from './invoice/invoice.module';
 import { BillModule } from './bill/bill.module';
 import { ArticleModule } from './article/article.module';
 import { DocumentArticleModule } from './document-article/document-article.module';
+import { DocumentArticleTaxModule } from './document-article-tax/document-article-tax.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { DocumentArticleModule } from './document-article/document-article.modul
     BillModule,
     ArticleModule,
     DocumentArticleModule,
+    DocumentArticleTaxModule,
   ],
   controllers: [AppController],
   providers: [
