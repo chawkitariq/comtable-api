@@ -1,11 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { onNotProduction } from './app.util';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  if (process.env.APP_ENV !== 'production') {
+  onNotProduction(() => {
     const config = new DocumentBuilder()
       .setTitle('Comtable Api')
       .setDescription('The comtable Api documentation')
@@ -13,7 +14,7 @@ async function bootstrap() {
       .build();
     const documentFactory = () => SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('swagger', app, documentFactory);
-  }
+  });
 
   await app.listen(process.env.PORT ?? 3000);
 }
