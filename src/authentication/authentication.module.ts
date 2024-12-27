@@ -8,9 +8,11 @@ import { JwtAuthenticationStrategy } from './strategies/jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthenticationGuard } from './guards/jwt.guard';
 import { AuthenticationController } from './authentication.controller';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     UserModule,
     PassportModule,
     JwtModule.register({
