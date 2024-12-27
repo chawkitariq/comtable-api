@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSettingDto } from './dto/create-setting.dto';
-import { UpdateSettingDto } from './dto/update-setting.dto';
+import { CreateSettingDto } from './dtos/create-setting.dto';
+import { UpdateSettingDto } from './dtos/update-setting.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Setting } from './entities/setting.entity';

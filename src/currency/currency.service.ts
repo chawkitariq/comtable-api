@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCurrencyDto } from './dto/create-currency.dto';
-import { UpdateCurrencyDto } from './dto/update-currency.dto';
+import { CreateCurrencyDto } from './dtos/create-currency.dto';
+import { UpdateCurrencyDto } from './dtos/update-currency.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Currency } from './entities/currency.entity';

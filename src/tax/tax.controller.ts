@@ -8,8 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { TaxService } from './tax.service';
-import { CreateTaxDto } from './dto/create-tax.dto';
-import { UpdateTaxDto } from './dto/update-tax.dto';
+import { CreateTaxDto } from './dtos/create-tax.dto';
+import { UpdateTaxDto } from './dtos/update-tax.dto';
 
 @Controller('taxes')
 export class TaxController {

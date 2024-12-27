@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateNotificationDto } from './dto/create-notification.dto';
-import { UpdateNotificationDto } from './dto/update-notification.dto';
+import { CreateNotificationDto } from './dtos/create-notification.dto';
+import { UpdateNotificationDto } from './dtos/update-notification.dto';
 import { Notification } from './entities/notification.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTaxDto } from './dto/create-tax.dto';
-import { UpdateTaxDto } from './dto/update-tax.dto';
+import { CreateTaxDto } from './dtos/create-tax.dto';
+import { UpdateTaxDto } from './dtos/update-tax.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Tax } from './entities/tax.entity';

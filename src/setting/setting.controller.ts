@@ -8,8 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { SettingService } from './setting.service';
-import { CreateSettingDto } from './dto/create-setting.dto';
-import { UpdateSettingDto } from './dto/update-setting.dto';
+import { CreateSettingDto } from './dtos/create-setting.dto';
+import { UpdateSettingDto } from './dtos/update-setting.dto';
 
 @Controller('settings')
 export class SettingController {
