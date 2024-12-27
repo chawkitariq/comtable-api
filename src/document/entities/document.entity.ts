@@ -1,4 +1,5 @@
 import { Company } from 'src/company/entities/company.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -85,6 +86,10 @@ export class Document {
   @ManyToOne(() => Company, { nullable: true })
   @JoinColumn({ name: 'company_id' })
   company?: Relation<Company>;
+
+  @ManyToOne(() => User, { nullable: true })
+  @JoinColumn({ name: 'created_by' })
+  createdBy?: Relation<User>;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

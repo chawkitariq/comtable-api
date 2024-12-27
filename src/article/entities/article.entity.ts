@@ -1,6 +1,7 @@
 import { Category } from 'src/category/entities/category.entity';
 import { Company } from 'src/company/entities/company.entity';
 import { Tax } from 'src/tax/entities/tax.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -49,6 +50,10 @@ export class Article {
   @ManyToOne(() => Tax, { nullable: true })
   @JoinColumn({ name: 'tax_id' })
   tax?: Relation<Tax>;
+
+  @ManyToOne(() => User, { nullable: true })
+  @JoinColumn({ name: 'created_by' })
+  createdBy?: Relation<User>;
 
   @Column({ name: 'disabled_at', type: 'timestamptz', nullable: true })
   disabledAt?: Date;
