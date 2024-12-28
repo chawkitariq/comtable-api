@@ -24,20 +24,23 @@ export class Article {
   @Column()
   name: string;
 
-  @Column()
-  sku: string;
+  @Column({ default: 'product' })
+  type: string;
+
+  @Column({ nullable: true })
+  sku?: string;
 
   @Column({ type: 'text', nullable: true })
   description?: string;
 
-  @Column({ name: 'sale_price', type: 'integer' })
-  salePrice: number;
+  @Column({ name: 'sale_price', type: 'integer', default: 0 })
+  salePrice?: number;
 
-  @Column({ name: 'purchase_price', type: 'integer' })
-  purchasePrice: number;
+  @Column({ name: 'purchase_price', type: 'integer', default: 0 })
+  purchasePrice?: number;
 
-  @Column({ type: 'integer' })
-  quantity: number;
+  @Column({ type: 'integer', default: 0 })
+  quantity?: number;
 
   @ManyToOne(() => Company, { nullable: true })
   @JoinColumn({ name: 'company_id' })
