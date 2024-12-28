@@ -49,11 +49,12 @@ export class AuthenticationService {
     const payload = { sub: user.id };
 
     const expiresIn = ms(process.env.AUTH_SECRET_EXPIRE_IN) / 1000;
+    const expiredAt = Math.floor(Date.now() / 1000) + expiresIn;
 
     return {
-      token_type: 'Bearer',
-      access_token: this.jwtService.sign(payload, { expiresIn }),
-      expires_in: expiresIn,
+      tokenType: 'Bearer',
+      accessToken: this.jwtService.sign(payload),
+      tokenExpiredAt: expiredAt,
     };
   }
 }
