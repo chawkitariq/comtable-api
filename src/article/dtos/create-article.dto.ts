@@ -1,6 +1,5 @@
 import {
   IsArray,
-  IsBoolean,
   IsDefined,
   IsIn,
   IsNotEmpty,
@@ -26,10 +25,6 @@ export class CreateArticleDto {
 
   @IsOptional()
   purchasePrice: number;
-
-  @IsOptional()
-  @IsBoolean()
-  disabled = false;
 
   @IsOptional()
   @IsArray()
