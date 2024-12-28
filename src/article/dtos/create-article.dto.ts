@@ -10,7 +10,6 @@ import {
 } from 'class-validator';
 import { Category } from 'src/category/entities/category.entity';
 import { Company } from 'src/company/entities/company.entity';
-import { Tax } from 'src/tax/entities/tax.entity';
 
 export class CreateArticleDto {
   @IsDefined()
@@ -43,5 +42,4 @@ export class CreateArticleDto {
 
   company?: Company;
   category?: Category;
-  tax?: Tax;
 }

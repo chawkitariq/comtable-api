@@ -1,6 +1,5 @@
 import { Category } from 'src/category/entities/category.entity';
 import { Company } from 'src/company/entities/company.entity';
-import { Tax } from 'src/tax/entities/tax.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -39,9 +38,6 @@ export class Article {
   @Column({ name: 'purchase_price', type: 'integer', default: 0 })
   purchasePrice?: number;
 
-  @Column({ type: 'integer', default: 0 })
-  quantity?: number;
-
   @ManyToOne(() => Company, { nullable: true })
   @JoinColumn({ name: 'company_id' })
   company?: Relation<Company>;
@@ -49,10 +45,6 @@ export class Article {
   @ManyToOne(() => Category, { nullable: true })
   @JoinColumn({ name: 'category_id' })
   category?: Relation<Category>;
-
-  @ManyToOne(() => Tax, { nullable: true })
-  @JoinColumn({ name: 'tax_id' })
-  tax?: Relation<Tax>;
 
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'created_by' })
