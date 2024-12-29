@@ -1,4 +1,4 @@
-import { Company } from 'src/company/entities/company.entity';
+import { CompanyEntity } from 'src/company/entities/company.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   CreateDateColumn,
@@ -16,9 +16,9 @@ export class Tax {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Company, { nullable: true })
+  @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })
-  company?: Relation<Company>;
+  company?: Relation<CompanyEntity>;
 
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'created_by' })

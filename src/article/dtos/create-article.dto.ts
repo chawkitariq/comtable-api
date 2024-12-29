@@ -8,7 +8,7 @@ import {
   IsUUID,
 } from 'class-validator';
 import { Category } from 'src/category/entities/category.entity';
-import { Company } from 'src/company/entities/company.entity';
+import { CompanyEntity } from 'src/company/entities/company.entity';
 
 export class CreateArticleDto {
   @IsDefined()
@@ -35,6 +35,6 @@ export class CreateArticleDto {
   @IsUUID('4')
   categoryId?: string;
 
-  company?: Company;
+  company?: CompanyEntity;
   category?: Category;
 }

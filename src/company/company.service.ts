@@ -3,13 +3,13 @@ import { CreateCompanyDto } from './dtos/create-company.dto';
 import { UpdateCompanyDto } from './dtos/update-company.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Company } from './entities/company.entity';
+import { CompanyEntity } from './entities/company.entity';
 
 @Injectable()
 export class CompanyService {
   constructor(
-    @InjectRepository(Company)
-    public readonly companyRepository: Repository<Company>,
+    @InjectRepository(CompanyEntity)
+    public readonly companyRepository: Repository<CompanyEntity>,
   ) {}
 
   create(dto: CreateCompanyDto) {
@@ -26,6 +26,24 @@ export class CompanyService {
 
   update(id: string, dto: UpdateCompanyDto) {
     return this.companyRepository.update(id, dto);
+  }
+
+  findEnabledByUser(userId: string) {
+    return this.companyRepository.findOneBy({
+      createdBy: { id: userId },
+      isEnabled: true,
+    });
+  }
+
+  enable(id: string) {
+    return this.companyRepository.update(id, { isEnabled: true });
+  }
+
+  disableByUser(userId: string) {
+    return this.companyRepository.update(
+      { createdBy: { id: userId }, isEnabled: true },
+      { isEnabled: false },
+    );
   }
 
   remove(id: string) {

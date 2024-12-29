@@ -1,4 +1,4 @@
-import { Company } from 'src/company/entities/company.entity';
+import { CompanyEntity } from 'src/company/entities/company.entity';
 import {
   Column,
   CreateDateColumn,
@@ -24,9 +24,9 @@ export class Setting {
   @Column({ type: 'text', nullable: true })
   value?: string;
 
-  @ManyToOne(() => Company, { nullable: true })
+  @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })
-  company?: Relation<Company>;
+  company?: Relation<CompanyEntity>;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

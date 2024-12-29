@@ -10,6 +10,7 @@ import {
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dtos/create-company.dto';
 import { UpdateCompanyDto } from './dtos/update-company.dto';
+import { User } from 'src/authentication/decorators/user.decrator';
 
 @Controller('companies')
 export class CompanyController {
@@ -36,6 +37,17 @@ export class CompanyController {
     @Body() updateCompanyDto: UpdateCompanyDto,
   ) {
     return this.companyService.update(id, updateCompanyDto);
+  }
+
+  @Patch(':company/enable')
+  async on(@User() user, @Param('company') id: string) {
+    await this.disable(user);
+    return this.companyService.enable(id);
+  }
+
+  @Post('disable')
+  async disable(@User() user) {
+    await this.companyService.disableByUser(user.id);
   }
 
   @Delete(':company')

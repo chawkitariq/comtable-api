@@ -1,5 +1,5 @@
 import { Category } from 'src/category/entities/category.entity';
-import { Company } from 'src/company/entities/company.entity';
+import { CompanyEntity } from 'src/company/entities/company.entity';
 import { Contact } from 'src/contact/entities/contact.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
@@ -85,9 +85,9 @@ export class Document {
   @Column({ nullable: true })
   color?: string;
 
-  @ManyToOne(() => Company, { nullable: true })
+  @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })
-  company?: Relation<Company>;
+  company?: Relation<CompanyEntity>;
 
   @ManyToOne(() => Contact, { nullable: true })
   @JoinColumn({ name: 'contact_id' })

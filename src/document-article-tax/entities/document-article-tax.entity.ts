@@ -1,4 +1,4 @@
-import { Company } from 'src/company/entities/company.entity';
+import { CompanyEntity } from 'src/company/entities/company.entity';
 import { DocumentArticle } from 'src/document-article/entities/document-article.entity';
 import { Document } from 'src/document/entities/document.entity';
 import { Tax } from 'src/tax/entities/tax.entity';
@@ -29,9 +29,9 @@ export class DocumentArticleTax {
   @Column({ type: 'integer', default: 0 })
   amount: number;
 
-  @ManyToOne(() => Company, { nullable: true })
+  @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })
-  company?: Relation<Company>;
+  company?: Relation<CompanyEntity>;
 
   @ManyToOne(() => Document, { nullable: true })
   @JoinColumn({ name: 'document_id' })

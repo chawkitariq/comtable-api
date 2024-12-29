@@ -1,5 +1,5 @@
 import { Category } from 'src/category/entities/category.entity';
-import { Company } from 'src/company/entities/company.entity';
+import { CompanyEntity } from 'src/company/entities/company.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -38,9 +38,9 @@ export class Article {
   @Column({ name: 'purchase_price', type: 'integer', default: 0 })
   purchasePrice?: number;
 
-  @ManyToOne(() => Company, { nullable: true })
+  @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })
-  company?: Relation<Company>;
+  company?: Relation<CompanyEntity>;
 
   @ManyToOne(() => Category, { nullable: true })
   @JoinColumn({ name: 'category_id' })

@@ -1,6 +1,6 @@
 import { Account } from 'src/account/entities/account.entity';
 import { Category } from 'src/category/entities/category.entity';
-import { Company } from 'src/company/entities/company.entity';
+import { CompanyEntity } from 'src/company/entities/company.entity';
 import { Contact } from 'src/contact/entities/contact.entity';
 import { Document } from 'src/document/entities/document.entity';
 import { User } from 'src/user/entities/user.entity';
@@ -49,9 +49,9 @@ export class Transaction {
   })
   reconciledAt: Date;
 
-  @ManyToOne(() => Company, { nullable: true })
+  @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })
-  company?: Relation<Company>;
+  company?: Relation<CompanyEntity>;
 
   @ManyToOne(() => Account, { nullable: true })
   @JoinColumn({ name: 'account_id' })

@@ -12,15 +12,15 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'companies' })
-export class Company {
+export class CompanyEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ nullable: true })
   domain?: string;
 
-  @Column({ name: 'is_active', type: 'boolean', default: false })
-  isActive: boolean;
+  @Column({ name: 'is_enabled', type: 'boolean', default: false })
+  isEnabled: boolean;
 
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'created_by' })

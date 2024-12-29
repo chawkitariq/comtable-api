@@ -20,6 +20,20 @@ export class ArticleService {
     return this.articleRepository.find();
   }
 
+  findAllByCompany(companyId: string) {
+    return this.articleRepository.find({
+      where: { company: { id: companyId } },
+      relations: ['company'],
+    });
+  }
+
+  findOneByCompany(id: string, companyId: string) {
+    return this.articleRepository.findOne({
+      where: { id, company: { id: companyId } },
+      relations: ['company'],
+    });
+  }
+
   findOne(id: string) {
     return this.articleRepository.findOne({ where: { id } });
   }
