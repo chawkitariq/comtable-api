@@ -1,22 +1,27 @@
-export default class AppEnv {
+export class Env {
   public static isProduction = process.env.APP_ENV === 'production';
   public static isDevelopment = process.env.APP_ENV === 'development';
 
   public static onNotProduction(fn: () => void) {
-    if (!AppEnv.isProduction) {
+    if (!Env.isProduction) {
       fn();
     }
   }
 
   public static onProduction(fn: () => void) {
-    if (AppEnv.isProduction) {
+    if (Env.isProduction) {
       fn();
     }
   }
 
   public static onDevelopment(fn: () => void) {
-    if (AppEnv.isDevelopment) {
+    if (Env.isDevelopment) {
       fn();
     }
   }
+}
+
+export class App {
+  public static locale = process.env.APP_LOCALE;
+  public static env = Env;
 }

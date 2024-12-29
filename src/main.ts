@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import AppEnv from './app.util';
 import { useContainer } from 'class-validator';
 import { ValidationPipe } from '@nestjs/common';
+import { App } from './app.util';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,7 +20,7 @@ async function bootstrap() {
     }),
   );
 
-  AppEnv.onNotProduction(() => {
+  App.env.onNotProduction(() => {
     const config = new DocumentBuilder()
       .setTitle('Comtable Api')
       .setDescription('The comtable Api documentation')

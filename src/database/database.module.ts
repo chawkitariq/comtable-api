@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import AppEnv from 'src/app.util';
+import { App } from 'src/app.util';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import AppEnv from 'src/app.util';
       database: process.env.DB_DATABASE,
       autoLoadEntities: true,
       entities: [],
-      synchronize: !AppEnv.isProduction,
+      synchronize: !App.env.isProduction,
     }),
   ],
 })
