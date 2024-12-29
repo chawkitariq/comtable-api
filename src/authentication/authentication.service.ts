@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/user/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { compare, hash } from 'bcrypt';
 import ms from 'ms';
@@ -46,7 +46,7 @@ export class AuthenticationService {
     return user;
   }
 
-  async login(user: User) {
+  async login(user: UserEntity) {
     const payload = { sub: user.id };
 
     const expiresIn = ms(process.env.AUTH_SECRET_EXPIRE_IN) / 1000;

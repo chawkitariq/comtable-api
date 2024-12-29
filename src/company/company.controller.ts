@@ -11,19 +11,23 @@ import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dtos/create-company.dto';
 import { UpdateCompanyDto } from './dtos/update-company.dto';
 import { User } from 'src/authentication/decorators/user.decrator';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Controller('companies')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Post()
-  create(@Body() createCompanyDto: CreateCompanyDto) {
-    return this.companyService.create(createCompanyDto);
+  create(@User() user: UserEntity, @Body() createCompanyDto: CreateCompanyDto) {
+    return this.companyService.create({
+      ...createCompanyDto,
+      createdBy: user,
+    });
   }
 
   @Get()
-  findAll() {
-    return this.companyService.findAll();
+  findAll(@User('id') userId: string) {
+    return this.companyService.findAllByUser(userId);
   }
 
   @Get(':company')
@@ -33,25 +37,25 @@ export class CompanyController {
 
   @Patch(':company')
   update(
-    @Param('company') id: string,
+    @User('id') userId: string,
+    @Param('company') companyId: string,
     @Body() updateCompanyDto: UpdateCompanyDto,
   ) {
-    return this.companyService.update(id, updateCompanyDto);
+    return this.companyService.updateByUser(
+      companyId,
+      userId,
+      updateCompanyDto,
+    );
   }
 
-  @Patch(':company/enable')
-  async on(@User() user, @Param('company') id: string) {
-    await this.disable(user);
-    return this.companyService.enable(id);
-  }
-
-  @Post('disable')
-  async disable(@User() user) {
-    await this.companyService.disableByUser(user.id);
+  @Post(':company/switch')
+  async enable(@User('id') userId: string, @Param('company') id: string) {
+    await this.companyService.disableByUser(userId);
+    return this.companyService.enableByUser(id, userId);
   }
 
   @Delete(':company')
-  remove(@Param('company') id: string) {
-    return this.companyService.remove(id);
+  remove(@User('id') userId: string, @Param('company') id: string) {
+    return this.companyService.removeByUser(id, userId);
   }
 }

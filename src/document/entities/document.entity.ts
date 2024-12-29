@@ -1,7 +1,7 @@
 import { Category } from 'src/category/entities/category.entity';
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { Contact } from 'src/contact/entities/contact.entity';
-import { User } from 'src/user/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -97,9 +97,9 @@ export class Document {
   @JoinColumn({ name: 'category_id' })
   category?: Relation<Category>;
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })
-  createdBy?: Relation<User>;
+  createdBy?: Relation<UserEntity>;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

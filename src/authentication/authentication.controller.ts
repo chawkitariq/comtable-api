@@ -6,11 +6,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { LocalAuthenticationGuard } from './guards/local.guard';
-import { User } from './decorators/user.decrator';
 import { AuthenticationService } from './authentication.service';
 import { Public } from './decorators/public.decorator';
 import AuthenticationRegisterDto from './dtos/register.dto';
 import { UserService } from 'src/user/user.service';
+import { User } from './decorators/user.decrator';
 
 @Controller('auth')
 export class AuthenticationController {
@@ -27,7 +27,7 @@ export class AuthenticationController {
     });
 
     if (isExists) {
-      throw new ConflictException('User already exists');
+      throw new ConflictException('UserEntity already exists');
     }
 
     return this.authenticationService.register(dto);

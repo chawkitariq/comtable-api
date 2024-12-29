@@ -2,7 +2,7 @@ import { CompanyEntity } from 'src/company/entities/company.entity';
 import { DocumentArticle } from 'src/document-article/entities/document-article.entity';
 import { Document } from 'src/document/entities/document.entity';
 import { Tax } from 'src/tax/entities/tax.entity';
-import { User } from 'src/user/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -45,9 +45,9 @@ export class DocumentArticleTax {
   @JoinColumn({ name: 'tax_id' })
   tax?: Relation<Tax>;
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })
-  createdBy?: Relation<User>;
+  createdBy?: Relation<UserEntity>;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

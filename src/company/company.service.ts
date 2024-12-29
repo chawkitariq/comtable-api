@@ -20,12 +20,34 @@ export class CompanyService {
     return this.companyRepository.find();
   }
 
+  findAllByUser(userId: string) {
+    return this.companyRepository.find({
+      where: { createdBy: { id: userId } },
+    });
+  }
+
   findOne(id: string) {
     return this.companyRepository.findOne({ where: { id } });
   }
 
+  findOneByUser(id: string, userId: string) {
+    return this.companyRepository.findOne({
+      where: { id, createdBy: { id: userId } },
+    });
+  }
+
   update(id: string, dto: UpdateCompanyDto) {
     return this.companyRepository.update(id, dto);
+  }
+
+  updateByUser(id: string, userId: string, dto: UpdateCompanyDto) {
+    return this.companyRepository.update(
+      {
+        id,
+        createdBy: { id: userId },
+      },
+      dto,
+    );
   }
 
   findEnabledByUser(userId: string) {
@@ -35,8 +57,11 @@ export class CompanyService {
     });
   }
 
-  enable(id: string) {
-    return this.companyRepository.update(id, { isEnabled: true });
+  enableByUser(id: string, userId: string) {
+    return this.companyRepository.update(
+      { id, createdBy: { id: userId } },
+      { isEnabled: true },
+    );
   }
 
   disableByUser(userId: string) {
@@ -48,5 +73,12 @@ export class CompanyService {
 
   remove(id: string) {
     return this.companyRepository.softDelete(id);
+  }
+
+  removeByUser(id: string, userId: string) {
+    return this.companyRepository.softDelete({
+      id,
+      createdBy: { id: userId },
+    });
   }
 }

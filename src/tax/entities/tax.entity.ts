@@ -1,5 +1,5 @@
 import { CompanyEntity } from 'src/company/entities/company.entity';
-import { User } from 'src/user/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import {
   CreateDateColumn,
   DeleteDateColumn,
@@ -20,9 +20,9 @@ export class Tax {
   @JoinColumn({ name: 'company_id' })
   company?: Relation<CompanyEntity>;
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })
-  createdBy?: Relation<User>;
+  createdBy?: Relation<UserEntity>;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

@@ -1,4 +1,5 @@
-import { User } from 'src/user/entities/user.entity';
+import { App } from 'src/app.util';
+import { UserEntity } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -16,15 +17,45 @@ export class CompanyEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column()
+  name: string;
+
   @Column({ nullable: true })
-  domain?: string;
+  email?: string;
+
+  @Column({ name: 'tax_number', nullable: true })
+  taxNumber?: string;
+
+  @Column({ nullable: true })
+  phone?: string;
+
+  @Column({ nullable: true })
+  address?: string;
+
+  @Column({ nullable: true })
+  city?: string;
+
+  @Column({ nullable: true })
+  postalCode?: string;
+
+  @Column({ nullable: true })
+  state?: string;
+
+  @Column({ nullable: true })
+  country?: string;
+
+  @Column({ nullable: true })
+  currency?: string;
+
+  @Column({ default: 'fr-FR' })
+  locale: string;
 
   @Column({ name: 'is_enabled', type: 'boolean', default: false })
   isEnabled: boolean;
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })
-  createdBy?: Relation<User>;
+  createdBy?: Relation<UserEntity>;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

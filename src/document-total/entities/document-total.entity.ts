@@ -1,6 +1,6 @@
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { Document } from 'src/document/entities/document.entity';
-import { User } from 'src/user/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -44,9 +44,9 @@ export class DocumentTotal {
   @JoinColumn({ name: 'document_id' })
   document?: Relation<Document>;
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })
-  createdBy?: Relation<User>;
+  createdBy?: Relation<UserEntity>;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
