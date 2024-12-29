@@ -1,5 +1,6 @@
 import { User } from 'src/user/entities/user.entity';
 import {
+  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
@@ -14,6 +15,12 @@ import {
 export class Company {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({ nullable: true })
+  domain?: string;
+
+  @Column({ name: 'is_active', type: 'boolean', default: false })
+  isActive: boolean;
 
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'created_by' })
