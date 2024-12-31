@@ -16,8 +16,10 @@ export class ContactService {
     return this.contactRepository.save(dto);
   }
 
-  findAll() {
-    return this.contactRepository.find();
+  findAll(companyId: string) {
+    return this.contactRepository.find({
+      where: { company: { id: companyId } },
+    });
   }
 
   findOne(id: string) {

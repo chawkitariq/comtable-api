@@ -10,36 +10,47 @@ import {
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { UpdateContactDto } from './dtos/update-contact.dto';
+import { CompanyService } from 'src/company/company.service';
 
-@Controller('contacts')
+@Controller()
 export class ContactController {
-  constructor(private readonly contactService: ContactService) {}
+  constructor(
+    private readonly contactService: ContactService,
+    private readonly companyService: CompanyService,
+  ) {}
 
-  @Post()
-  create(@Body() createContactDto: CreateContactDto) {
-    return this.contactService.create(createContactDto);
+  @Post('/companies/:companyId:/contacts')
+  async create(
+    @Param('companyId') companyId: string,
+    @Body() createContactDto: CreateContactDto,
+  ) {
+    const company = await this.companyService.findOne(companyId);
+    return this.contactService.create({
+      ...createContactDto,
+      company,
+    });
   }
 
-  @Get()
-  findAll() {
-    return this.contactService.findAll();
+  @Get('/companies/:companyId:/contacts')
+  findAll(@Param('companyId') companyId: string) {
+    return this.contactService.findAll(companyId);
   }
 
-  @Get(':contact')
-  findOne(@Param('contact') id: string) {
-    return this.contactService.findOne(id);
+  @Get('contacts/:contactId')
+  findOne(@Param('contactId') contactId: string) {
+    return this.contactService.findOne(contactId);
   }
 
-  @Patch(':contact')
+  @Patch('contacts/:contactId')
   update(
-    @Param('contact') id: string,
+    @Param('contactId') contactId: string,
     @Body() updateContactDto: UpdateContactDto,
   ) {
-    return this.contactService.update(id, updateContactDto);
+    return this.contactService.update(contactId, updateContactDto);
   }
 
-  @Delete(':contact')
-  remove(@Param('contact') id: string) {
-    return this.contactService.remove(id);
+  @Delete('contacts/:contactId')
+  remove(@Param('contactId') contactId: string) {
+    return this.contactService.remove(contactId);
   }
 }
