@@ -50,27 +50,6 @@ export class CompanyService {
     );
   }
 
-  findEnabledByUser(userId: string) {
-    return this.companyRepository.findOneBy({
-      createdBy: { id: userId },
-      isEnabled: true,
-    });
-  }
-
-  enableByUser(id: string, userId: string) {
-    return this.companyRepository.update(
-      { id, createdBy: { id: userId } },
-      { isEnabled: true },
-    );
-  }
-
-  disableByUser(userId: string) {
-    return this.companyRepository.update(
-      { createdBy: { id: userId }, isEnabled: true },
-      { isEnabled: false },
-    );
-  }
-
   remove(id: string) {
     return this.companyRepository.softDelete(id);
   }

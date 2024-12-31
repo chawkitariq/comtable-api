@@ -1,4 +1,3 @@
-import { App } from 'src/app.util';
 import { UserEntity } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -49,9 +48,6 @@ export class CompanyEntity {
 
   @Column({ default: 'fr-FR' })
   locale: string;
-
-  @Column({ name: 'is_enabled', type: 'boolean', default: false })
-  isEnabled: boolean;
 
   @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })

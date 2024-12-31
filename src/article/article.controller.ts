@@ -7,17 +7,14 @@ import {
   Param,
   Delete,
   NotFoundException,
-  UseGuards,
 } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dtos/create-article.dto';
 import { UpdateArticleDto } from './dtos/update-article.dto';
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { Company } from 'src/company/decorators/company.decorator';
-import { EnabledCompanyGuard } from 'src/company/guards/enabled-company.guard';
 
 @Controller('articles')
-@UseGuards(EnabledCompanyGuard)
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 

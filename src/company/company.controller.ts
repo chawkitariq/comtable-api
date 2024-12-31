@@ -48,12 +48,6 @@ export class CompanyController {
     );
   }
 
-  @Post(':company/switch')
-  async enable(@User('id') userId: string, @Param('company') id: string) {
-    await this.companyService.disableByUser(userId);
-    return this.companyService.enableByUser(id, userId);
-  }
-
   @Delete(':company')
   remove(@User('id') userId: string, @Param('company') id: string) {
     return this.companyService.removeByUser(id, userId);
