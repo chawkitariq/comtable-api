@@ -27,6 +27,7 @@ export class DocumentBillController {
     const company = await this.companyService.findOne(billId);
     return this.documentService.create({
       ...createDocumentDto,
+      type: 'bill',
       company,
     });
   }

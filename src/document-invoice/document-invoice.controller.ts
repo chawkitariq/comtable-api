@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CompanyService } from 'src/company/company.service';
 import { DocumentService } from 'src/document/document.service';
 import { CreateDocumentInvoiceDto } from './dtos/create-document-invoice.dto';
@@ -27,6 +19,7 @@ export class DocumentInvoiceController {
     const company = await this.companyService.findOne(companyId);
     return this.documentService.create({
       ...createDocumentDto,
+      type: 'invoice',
       company,
     });
   }
@@ -41,7 +34,7 @@ export class DocumentInvoiceController {
     return this.documentService.findOne(invoiceId);
   }
 
-  @Patch('/invoices/:invoiceId')
+  // @Patch('/invoices/:invoiceId')
   update(
     @Param('invoiceId') invoiceId: string,
     @Body() updateDocumentDto: UpdateDocumentInvoiceDto,

@@ -9,42 +9,44 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
+import { DocumentArticle } from './document-article.entity';
 
 @Entity({ name: 'documents' })
 export class Document {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'document_number' })
+  @Column({ name: 'document_number', nullable: true })
   number: string;
 
   @Column({ name: 'order_number', nullable: true })
   orderNumber?: string;
 
-  @Column()
+  @Column({ default: 'invoice' })
   type: string;
 
-  @Column()
+  @Column({ default: 'unpaid' })
   status: string;
 
-  @Column({ name: 'issued_at', type: 'timestamptz' })
+  @Column({ name: 'issued_at', type: 'timestamptz', nullable: true })
   issuedAt: Date;
 
-  @Column({ name: 'due_at', type: 'timestamptz' })
+  @Column({ name: 'due_at', type: 'timestamptz', nullable: true })
   dueAt: Date;
 
-  @Column({ name: 'currency_code' })
-  currencyCode: string;
+  @Column({ name: 'currency_code', nullable: true })
+  currencyCode?: string;
 
-  @Column({ name: 'currency_rate', type: 'float' })
+  @Column({ name: 'currency_rate', type: 'integer', default: 0 })
   currencyRate: number;
 
-  @Column({ name: 'contact_name' })
-  contactName: string;
+  @Column({ name: 'contact_name', nullable: true })
+  contactName?: string;
 
   @Column({ name: 'contact_email', nullable: true })
   contactEmail?: string;
@@ -84,6 +86,12 @@ export class Document {
 
   @Column({ nullable: true })
   color?: string;
+
+  @OneToMany(
+    () => DocumentArticle,
+    (documentArticle) => documentArticle.document,
+  )
+  articles?: Relation<DocumentArticle[]>;
 
   @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })

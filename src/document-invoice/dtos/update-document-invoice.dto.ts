@@ -1,6 +1,3 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateDocumentInvoiceDto } from './create-document-invoice.dto';
+import { UpdateDocumentDto } from 'src/document/dtos/update-document.dto';
 
-export class UpdateDocumentInvoiceDto extends PartialType(
-  CreateDocumentInvoiceDto,
-) {}
+export class UpdateDocumentInvoiceDto extends UpdateDocumentDto {}

@@ -1,4 +1,3 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateDocumentBillDto } from './create-document-bill.dto';
+import { UpdateDocumentDto } from 'src/document/dtos/update-document.dto';
 
-export class UpdateDocumentBillDto extends PartialType(CreateDocumentBillDto) {}
+export class UpdateDocumentBillDto extends UpdateDocumentDto {}

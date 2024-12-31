@@ -31,10 +31,10 @@ export class DocumentArticle {
   @Column({ nullable: true })
   sku?: string;
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'integer', default: 0 })
   quantity: number;
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'integer', default: 0 })
   price: number;
 
   @Column({ type: 'integer', default: 0 })
@@ -46,7 +46,7 @@ export class DocumentArticle {
   @Column({ name: 'discount_rate', type: 'integer', default: 0 })
   discountRate: string;
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'integer', default: 0 })
   total: string;
 
   @ManyToOne(() => CompanyEntity, { nullable: true })

@@ -1,35 +1,25 @@
-import {
-  IsDefined,
-  IsNotEmpty,
-  IsNumberString,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsArray, IsOptional, ValidateNested } from 'class-validator';
 import { Category } from 'src/category/entities/category.entity';
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { Contact } from 'src/contact/entities/contact.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { CreateDocumentArticleDto } from './create-document-article.dto';
+import { Type } from 'class-transformer';
 
 export class CreateDocumentDto {
-  @IsDefined()
-  @IsNotEmpty()
-  @IsNumberString()
+  @IsOptional()
   number: string;
 
-  @IsDefined()
-  @IsNotEmpty()
-  @IsString()
+  @IsOptional()
   type: string;
 
-  @IsDefined()
-  @IsNotEmpty()
-  @IsString()
+  @IsOptional()
   status: string;
 
-  @IsDefined()
+  @IsOptional()
   issuedAt: Date;
 
-  @IsDefined()
+  @IsOptional()
   dueAt: Date;
 
   @IsOptional()
@@ -79,6 +69,12 @@ export class CreateDocumentDto {
 
   @IsOptional()
   color?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateDocumentArticleDto)
+  articles?: CreateDocumentArticleDto[];
 
   company?: CompanyEntity;
   contact?: Contact;
