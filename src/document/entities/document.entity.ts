@@ -20,7 +20,7 @@ export class Document {
   id: string;
 
   @Column({ name: 'document_number' })
-  documentNumber: string;
+  number: string;
 
   @Column({ name: 'order_number', nullable: true })
   orderNumber?: string;

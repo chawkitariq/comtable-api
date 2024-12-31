@@ -10,36 +10,47 @@ import {
 import { DocumentService } from './document.service';
 import { CreateDocumentDto } from './dtos/create-document.dto';
 import { UpdateDocumentDto } from './dtos/update-document.dto';
+import { CompanyService } from 'src/company/company.service';
 
-@Controller('documents')
+@Controller()
 export class DocumentController {
-  constructor(private readonly documentService: DocumentService) {}
+  constructor(
+    private readonly documentService: DocumentService,
+    private readonly companyService: CompanyService,
+  ) {}
 
-  @Post()
-  create(@Body() createDocumentDto: CreateDocumentDto) {
-    return this.documentService.create(createDocumentDto);
+  @Post('/companies/:companyId/documents')
+  async create(
+    @Param('companyId') companyId: string,
+    @Body() createDocumentDto: CreateDocumentDto,
+  ) {
+    const company = await this.companyService.findOne(companyId);
+    return this.documentService.create({
+      ...createDocumentDto,
+      company,
+    });
   }
 
-  @Get()
-  findAll() {
-    return this.documentService.findAll();
+  @Get('/companies/:companyId/documents')
+  findAll(@Param('companyId') companyId: string) {
+    return this.documentService.findAllByCompany(companyId);
   }
 
-  @Get(':document')
-  findOne(@Param('document') id: string) {
-    return this.documentService.findOne(id);
+  @Get('/documents/:documentId')
+  findOne(@Param('documentId') documentId: string) {
+    return this.documentService.findOne(documentId);
   }
 
-  @Patch(':document')
+  @Patch('/documents/:documentId')
   update(
-    @Param('document') id: string,
+    @Param('documentId') documentId: string,
     @Body() updateDocumentDto: UpdateDocumentDto,
   ) {
-    return this.documentService.update(id, updateDocumentDto);
+    return this.documentService.update(documentId, updateDocumentDto);
   }
 
-  @Delete(':document')
-  remove(@Param('document') id: string) {
-    return this.documentService.remove(id);
+  @Delete('/documents/:documentId')
+  remove(@Param('documentId') documentId: string) {
+    return this.documentService.remove(documentId);
   }
 }

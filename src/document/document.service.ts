@@ -16,8 +16,12 @@ export class DocumentService {
     return this.documentRepository.save(dto);
   }
 
-  findAll() {
-    return this.documentRepository.find();
+  findAllByCompany(companyId: string) {
+    return this.documentRepository.find({
+      where: {
+        company: { id: companyId },
+      },
+    });
   }
 
   findOne(id: string) {
