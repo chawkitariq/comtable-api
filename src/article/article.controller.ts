@@ -7,42 +7,51 @@ import {
   Param,
   Delete,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dtos/create-article.dto';
 import { UpdateArticleDto } from './dtos/update-article.dto';
-import { CompanyEntity } from 'src/company/entities/company.entity';
-import { Company } from 'src/company/decorators/company.decorator';
+import { CompanyService } from 'src/company/company.service';
 
-@Controller('articles')
+@Controller()
 export class ArticleController {
-  constructor(private readonly articleService: ArticleService) {}
+  constructor(
+    private readonly articleService: ArticleService,
+    private readonly companyService: CompanyService,
+  ) {}
 
-  @Post()
+  @Post('companies/:companyId/articles')
   async create(
-    @Company() company: CompanyEntity,
+    @Param('companyId') companyId: string,
     @Body() createArticleDto: CreateArticleDto,
   ) {
+    const company = await this.companyService.findOne(companyId);
+
+    if (!company) {
+      throw new BadRequestException('Company not exists');
+    }
+
     return this.articleService.create({
       ...createArticleDto,
       company,
     });
   }
 
-  @Get()
-  async findAll(@Company() company: CompanyEntity) {
+  @Get('companies/:companyId/articles')
+  async findAll(@Param('companyId') companyId: string) {
+    const company = await this.companyService.findOne(companyId);
+
+    if (!company) {
+      throw new NotFoundException('Company not found');
+    }
+
     return this.articleService.findAllByCompany(company.id);
   }
 
-  @Get(':article')
-  async findOne(
-    @Company() company: CompanyEntity,
-    @Param('article') articleId: string,
-  ) {
-    const article = await this.articleService.findOneByCompany(
-      articleId,
-      company.id,
-    );
+  @Get('/articles/:articleId')
+  async findOne(@Param('article') articleId: string) {
+    const article = await this.articleService.findOne(articleId);
 
     if (!article) {
       throw new NotFoundException('Article not found');
@@ -51,20 +60,29 @@ export class ArticleController {
     return article;
   }
 
-  @Patch(':article')
-  update(
-    @Company() company: CompanyEntity,
+  @Patch('/articles/:articleId')
+  async update(
     @Param('article') articleId: string,
     @Body() updateArticleDto: UpdateArticleDto,
   ) {
-    return this.articleService.update(articleId, updateArticleDto);
+    const { affected } = await this.articleService.update(
+      articleId,
+      updateArticleDto,
+    );
+
+    if (!affected) {
+      throw new NotFoundException('Article not found');
+    }
+
+    return this.findOne(articleId);
   }
 
-  @Delete(':article')
-  remove(
-    @Company() company: CompanyEntity,
-    @Param('article') articleId: string,
-  ) {
-    return this.articleService.remove(articleId);
+  @Delete('/articles/:articleId')
+  async remove(@Param('article') articleId: string) {
+    const { affected } = await this.articleService.remove(articleId);
+
+    if (!affected) {
+      throw new NotFoundException('Article not found');
+    }
   }
 }
