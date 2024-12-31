@@ -60,7 +60,9 @@ export class AuthenticationService {
     return {
       tokenType: 'Bearer',
       accessToken: this.jwtService.sign(payload),
-      tokenExpiredAt: expiredAt,
+      expiresIn,
+      expiredAt,
+      me: user,
     };
   }
 }

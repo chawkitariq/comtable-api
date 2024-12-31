@@ -10,6 +10,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { User } from 'src/authentication/decorators/user.decrator';
 
 @Controller('users')
 export class UserController {
@@ -23,6 +24,11 @@ export class UserController {
   @Get()
   findAll() {
     return this.userService.findAll();
+  }
+
+  @Get('me')
+  findMe(@User() user) {
+    return user;
   }
 
   @Get(':user')
