@@ -3,21 +3,24 @@ import { CreateTaxDto } from './dtos/create-tax.dto';
 import { UpdateTaxDto } from './dtos/update-tax.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Tax } from './entities/tax.entity';
+import { TaxEntity } from './entities/tax.entity';
 
 @Injectable()
 export class TaxService {
   constructor(
-    @InjectRepository(Tax)
-    public readonly taxRepository: Repository<Tax>,
+    @InjectRepository(TaxEntity)
+    public readonly taxRepository: Repository<TaxEntity>,
   ) {}
 
   create(dto: CreateTaxDto) {
     return this.taxRepository.save(dto);
   }
 
-  findAll() {
-    return this.taxRepository.find();
+  findAll(companyId: string) {
+    return this.taxRepository.find({
+      where: { company: { id: companyId } },
+      relations: ['company', 'createdBy'],
+    });
   }
 
   findOne(id: string) {

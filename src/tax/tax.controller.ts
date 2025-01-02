@@ -10,33 +10,47 @@ import {
 import { TaxService } from './tax.service';
 import { CreateTaxDto } from './dtos/create-tax.dto';
 import { UpdateTaxDto } from './dtos/update-tax.dto';
+import { CompanyService } from 'src/company/company.service';
+import { User } from 'src/authentication/decorators/user.decrator';
 
-@Controller('taxes')
+@Controller()
 export class TaxController {
-  constructor(private readonly taxService: TaxService) {}
+  constructor(
+    private readonly taxService: TaxService,
+    private readonly companyService: CompanyService,
+  ) {}
 
-  @Post()
-  create(@Body() createTaxDto: CreateTaxDto) {
-    return this.taxService.create(createTaxDto);
+  @Post('/companies/:companyId/taxes')
+  async create(
+    @User() user,
+    @Param('companyId') companyId: string,
+    @Body() createTaxDto: CreateTaxDto,
+  ) {
+    const company = await this.companyService.findOne(companyId);
+    return this.taxService.create({
+      ...createTaxDto,
+      company,
+      createdBy: user,
+    });
   }
 
-  @Get()
-  findAll() {
-    return this.taxService.findAll();
+  @Get('/companies/:companyId/taxes')
+  findAll(@Param('companyId') companyId: string) {
+    return this.taxService.findAll(companyId);
   }
 
-  @Get(':tax')
-  findOne(@Param('tax') id: string) {
-    return this.taxService.findOne(id);
+  @Get('taxes/:tax')
+  findOne(@Param('taxId') taxId: string) {
+    return this.taxService.findOne(taxId);
   }
 
-  @Patch(':tax')
-  update(@Param('tax') id: string, @Body() updateTaxDto: UpdateTaxDto) {
-    return this.taxService.update(id, updateTaxDto);
+  @Patch('taxes/:taxId')
+  update(@Param('taxId') taxId: string, @Body() updateTaxDto: UpdateTaxDto) {
+    return this.taxService.update(taxId, updateTaxDto);
   }
 
-  @Delete(':tax')
-  remove(@Param('tax') id: string) {
-    return this.taxService.remove(id);
+  @Delete('taxes/:taxId')
+  remove(@Param('taxId') taxId: string) {
+    return this.taxService.remove(taxId);
   }
 }

@@ -1,6 +1,7 @@
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import {
+  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
@@ -10,11 +11,21 @@ import {
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
+import { TaxTypeEnum } from '../tax.type';
 
 @Entity({ name: 'taxes' })
-export class Tax {
+export class TaxEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column()
+  name: string;
+
+  @Column({ type: 'integer', default: 0 })
+  rate: number;
+
+  @Column({ type: 'enum', enum: TaxTypeEnum })
+  type: string;
 
   @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })

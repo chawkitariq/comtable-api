@@ -1,7 +1,7 @@
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { DocumentArticle } from 'src/document/entities/document-article.entity';
 import { Document } from 'src/document/entities/document.entity';
-import { Tax } from 'src/tax/entities/tax.entity';
+import { TaxEntity } from 'src/tax/entities/tax.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -41,9 +41,9 @@ export class DocumentArticleTax {
   @JoinColumn({ name: 'document_article_id' })
   documentArticle?: Relation<DocumentArticle>;
 
-  @ManyToOne(() => Tax, { nullable: true })
+  @ManyToOne(() => TaxEntity, { nullable: true })
   @JoinColumn({ name: 'tax_id' })
-  tax?: Relation<Tax>;
+  tax?: Relation<TaxEntity>;
 
   @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })
