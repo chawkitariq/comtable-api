@@ -1,7 +1,7 @@
 import { Account } from 'src/account/entities/account.entity';
 import { Category } from 'src/category/entities/category.entity';
 import { CompanyEntity } from 'src/company/entities/company.entity';
-import { Contact } from 'src/contact/entities/contact.entity';
+import { ContactEntity } from 'src/contact/entities/contact.entity';
 import { Document } from 'src/document/entities/document.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import {
@@ -61,9 +61,9 @@ export class Transaction {
   @JoinColumn({ name: 'document_id' })
   document?: Relation<Document>;
 
-  @ManyToOne(() => Contact, { nullable: true })
+  @ManyToOne(() => ContactEntity, { nullable: true })
   @JoinColumn({ name: 'contact_id' })
-  contact?: Relation<Contact>;
+  contact?: Relation<ContactEntity>;
 
   @ManyToOne(() => Category, { nullable: true })
   @JoinColumn({ name: 'category_id' })

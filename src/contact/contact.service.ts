@@ -3,13 +3,13 @@ import { CreateContactDto } from './dtos/create-contact.dto';
 import { UpdateContactDto } from './dtos/update-contact.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Contact } from './entities/contact.entity';
+import { ContactEntity } from './entities/contact.entity';
 
 @Injectable()
 export class ContactService {
   constructor(
-    @InjectRepository(Contact)
-    public readonly contactRepository: Repository<Contact>,
+    @InjectRepository(ContactEntity)
+    public readonly contactRepository: Repository<ContactEntity>,
   ) {}
 
   create(dto: CreateContactDto) {
@@ -19,6 +19,7 @@ export class ContactService {
   findAll(companyId: string) {
     return this.contactRepository.find({
       where: { company: { id: companyId } },
+      relations: ['company', 'createdBy'],
     });
   }
 

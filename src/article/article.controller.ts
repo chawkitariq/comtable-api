@@ -40,13 +40,7 @@ export class ArticleController {
 
   @Get('companies/:companyId/articles')
   async findAll(@Param('companyId') companyId: string) {
-    const company = await this.companyService.findOne(companyId);
-
-    if (!company) {
-      throw new NotFoundException('Company not found');
-    }
-
-    return this.articleService.findAllByCompany(company.id);
+    return this.articleService.findAllByCompany(companyId);
   }
 
   @Get('/articles/:articleId')

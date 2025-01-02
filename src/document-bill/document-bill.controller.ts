@@ -19,12 +19,12 @@ export class DocumentBillController {
     private readonly companyService: CompanyService,
   ) {}
 
-  @Post('/companies/:billId/bills')
+  @Post('/companies/:companyId/bills')
   async create(
-    @Param('billId') billId: string,
+    @Param('companyId') companyId: string,
     @Body() createDocumentDto: CreateDocumentBillDto,
   ) {
-    const company = await this.companyService.findOne(billId);
+    const company = await this.companyService.findOne(companyId);
     return this.documentService.create({
       ...createDocumentDto,
       type: 'bill',
@@ -32,26 +32,26 @@ export class DocumentBillController {
     });
   }
 
-  @Get('/companies/:billId/bills')
-  findAll(@Param('billId') billId: string) {
-    return this.documentService.findAllByCompany(billId);
+  @Get('/companies/:companyId/bills')
+  findAll(@Param('companyId') companyId: string) {
+    return this.documentService.findAllByCompany(companyId);
   }
 
-  @Get('/bills/:invoiceId')
-  findOne(@Param('invoiceId') invoiceId: string) {
-    return this.documentService.findOne(invoiceId);
+  @Get('/bills/:billId')
+  findOne(@Param('billId') billId: string) {
+    return this.documentService.findOne(billId);
   }
 
-  @Patch('/bills/:invoiceId')
+  @Patch('/bills/:billId')
   update(
-    @Param('invoiceId') invoiceId: string,
+    @Param('billId') billId: string,
     @Body() updateDocumentDto: UpdateDocumentBillDto,
   ) {
-    return this.documentService.update(invoiceId, updateDocumentDto);
+    return this.documentService.update(billId, updateDocumentDto);
   }
 
-  @Delete('/bills/:invoiceId')
-  remove(@Param('invoiceId') invoiceId: string) {
-    return this.documentService.remove(invoiceId);
+  @Delete('/bills/:billId')
+  remove(@Param('billId') billId: string) {
+    return this.documentService.remove(billId);
   }
 }

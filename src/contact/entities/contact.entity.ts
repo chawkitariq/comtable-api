@@ -13,7 +13,7 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'contacts' })
-export class Contact {
+export class ContactEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
