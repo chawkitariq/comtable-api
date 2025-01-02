@@ -11,6 +11,7 @@ import {
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
+import { CategoryTypeEnum } from '../category.type';
 
 @Entity({ name: 'categories' })
 export class Category {
@@ -20,10 +21,10 @@ export class Category {
   @Column()
   name: string;
 
-  @Column()
-  slug: string;
+  @Column({ nullable: true })
+  slug?: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: CategoryTypeEnum })
   type: string;
 
   @Column({ nullable: true })

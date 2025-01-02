@@ -16,8 +16,11 @@ export class CategoryService {
     return this.categoryRepository.save(createCategoryDto);
   }
 
-  findAll() {
-    return this.categoryRepository.find();
+  findAll(companyId: string) {
+    return this.categoryRepository.find({
+      where: { company: { id: companyId } },
+      relations: ['company', 'createdBy'],
+    });
   }
 
   findOne(id: string) {

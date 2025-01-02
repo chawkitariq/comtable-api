@@ -10,36 +10,50 @@ import {
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dtos/create-category.dto';
 import { UpdateCategoryDto } from './dtos/update-category.dto';
+import { User } from 'src/authentication/decorators/user.decrator';
+import { CompanyService } from 'src/company/company.service';
 
-@Controller('categories')
+@Controller()
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
+  constructor(
+    private readonly categoryService: CategoryService,
+    private readonly companyService: CompanyService,
+  ) {}
 
-  @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoryService.create(createCategoryDto);
+  @Post('/companies/:companyId/categories')
+  async create(
+    @User() user,
+    @Param('companyId') companyId: string,
+    @Body() createCategoryDto: CreateCategoryDto,
+  ) {
+    const company = await this.companyService.findOne(companyId);
+    return this.categoryService.create({
+      ...createCategoryDto,
+      company,
+      createdBy: user,
+    });
   }
 
-  @Get()
-  findAll() {
-    return this.categoryService.findAll();
+  @Get('/companies/:companyId/categories')
+  findAll(@Param('companyId') companyId: string) {
+    return this.categoryService.findAll(companyId);
   }
 
-  @Get(':category')
-  findOne(@Param('category') id: string) {
-    return this.categoryService.findOne(id);
+  @Get('categories/:categoryId')
+  findOne(@Param('categoryId') categoryId: string) {
+    return this.categoryService.findOne(categoryId);
   }
 
-  @Patch(':category')
+  @Patch('categories/:categoryId')
   update(
-    @Param('category') id: string,
+    @Param('categoryId') categoryId: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.categoryService.update(id, updateCategoryDto);
+    return this.categoryService.update(categoryId, updateCategoryDto);
   }
 
-  @Delete(':category')
-  remove(@Param('category') id: string) {
-    return this.categoryService.remove(id);
+  @Delete('categories/:categoryId')
+  remove(@Param('categoryId') categoryId: string) {
+    return this.categoryService.remove(categoryId);
   }
 }
