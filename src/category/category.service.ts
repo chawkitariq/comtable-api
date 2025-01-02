@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dtos/create-category.dto';
 import { UpdateCategoryDto } from './dtos/update-category.dto';
 import { Repository } from 'typeorm';
-import { Category } from './entities/category.entity';
+import { CategoryEntity } from './entities/category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class CategoryService {
   constructor(
-    @InjectRepository(Category)
-    public readonly categoryRepository: Repository<Category>,
+    @InjectRepository(CategoryEntity)
+    public readonly categoryRepository: Repository<CategoryEntity>,
   ) {}
 
   create(createCategoryDto: CreateCategoryDto) {

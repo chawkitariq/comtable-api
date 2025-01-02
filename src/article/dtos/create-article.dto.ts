@@ -7,7 +7,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { Category } from 'src/category/entities/category.entity';
+import { CategoryEntity } from 'src/category/entities/category.entity';
 import { CompanyEntity } from 'src/company/entities/company.entity';
 
 export class CreateArticleDto {
@@ -36,5 +36,5 @@ export class CreateArticleDto {
   categoryId?: string;
 
   company?: CompanyEntity;
-  category?: Category;
+  category?: CategoryEntity;
 }

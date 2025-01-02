@@ -14,7 +14,7 @@ import {
 import { CategoryTypeEnum } from '../category.type';
 
 @Entity({ name: 'categories' })
-export class Category {
+export class CategoryEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

@@ -1,4 +1,4 @@
-import { Category } from 'src/category/entities/category.entity';
+import { CategoryEntity } from 'src/category/entities/category.entity';
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { ContactEntity } from 'src/contact/entities/contact.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
@@ -101,9 +101,9 @@ export class Document {
   @JoinColumn({ name: 'contact_id' })
   contact?: Relation<ContactEntity>;
 
-  @ManyToOne(() => Category, { nullable: true })
+  @ManyToOne(() => CategoryEntity, { nullable: true })
   @JoinColumn({ name: 'category_id' })
-  category?: Relation<Category>;
+  category?: Relation<CategoryEntity>;
 
   @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })

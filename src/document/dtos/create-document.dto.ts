@@ -1,5 +1,5 @@
 import { IsArray, IsOptional, ValidateNested } from 'class-validator';
-import { Category } from 'src/category/entities/category.entity';
+import { CategoryEntity } from 'src/category/entities/category.entity';
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { ContactEntity } from 'src/contact/entities/contact.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
@@ -78,6 +78,6 @@ export class CreateDocumentDto {
 
   company?: CompanyEntity;
   contact?: ContactEntity;
-  category?: Category;
+  category?: CategoryEntity;
   createdBy?: UserEntity;
 }
