@@ -1,14 +1,15 @@
-import { IsDefined, IsIn, IsOptional } from 'class-validator';
+import { IsDefined, IsEnum, IsOptional } from 'class-validator';
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { ContactTypeEnum } from '../contact.type';
 
 export class CreateContactDto {
   @IsDefined()
   name: string;
 
   @IsDefined()
-  @IsIn(['customer', 'vendor'])
-  type: string;
+  @IsEnum(ContactTypeEnum)
+  type: ContactTypeEnum;
 
   @IsOptional()
   email?: string;

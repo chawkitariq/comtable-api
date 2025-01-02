@@ -11,6 +11,7 @@ import {
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
+import { ContactTypeEnum } from '../contact.type';
 
 @Entity({ name: 'contacts' })
 export class ContactEntity {
@@ -20,8 +21,8 @@ export class ContactEntity {
   @Column()
   name: string;
 
-  @Column()
-  type: string;
+  @Column({ type: 'enum', enum: ContactTypeEnum })
+  type: ContactTypeEnum;
 
   @Column({ nullable: true })
   email?: string;
