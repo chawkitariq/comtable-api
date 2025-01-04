@@ -1,3 +1,6 @@
+import { OmitType } from '@nestjs/mapped-types';
 import { CreateDocumentDto } from 'src/document/dtos/create-document.dto';
 
-export class CreateDocumentInvoiceDto extends CreateDocumentDto {}
+export class CreateDocumentInvoiceDto extends OmitType(CreateDocumentDto, [
+  'type',
+]) {}

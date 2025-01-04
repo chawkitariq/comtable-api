@@ -1,22 +1,24 @@
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
-import { Document } from '../entities/document.entity';
-import { IsOptional } from 'class-validator';
-import { DocumentArticle } from '../entities/document-article.entity';
+import { DocumentEntity } from '../entities/document.entity';
+import { IsEnum, IsOptional } from 'class-validator';
+import { DocumentArticleEntity } from '../entities/document-article.entity';
+import { TaxTypeEnum } from 'src/tax/tax.type';
 
 export class CreateDocumentArticleTaxDto {
   @IsOptional()
   name: string;
 
   @IsOptional()
-  type: string;
+  @IsEnum(TaxTypeEnum)
+  type: TaxTypeEnum;
 
   @IsOptional()
   amount: number;
 
   company?: CompanyEntity;
-  document?: Document;
-  tax?: Document;
-  documentArticle?: DocumentArticle;
+  document?: DocumentEntity;
+  tax?: DocumentEntity;
+  documentArticle?: DocumentArticleEntity;
   createdBy?: UserEntity;
 }

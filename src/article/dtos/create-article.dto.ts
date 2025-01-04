@@ -1,6 +1,7 @@
 import {
   IsArray,
   IsDefined,
+  IsEnum,
   IsIn,
   IsNotEmpty,
   IsOptional,
@@ -9,6 +10,7 @@ import {
 } from 'class-validator';
 import { CategoryEntity } from 'src/category/entities/category.entity';
 import { CompanyEntity } from 'src/company/entities/company.entity';
+import { ArticleTypeEnum } from '../article.type';
 
 export class CreateArticleDto {
   @IsDefined()
@@ -17,8 +19,8 @@ export class CreateArticleDto {
   name: string;
 
   @IsDefined()
-  @IsIn(['product', 'service'])
-  type: string;
+  @IsEnum([ArticleTypeEnum])
+  type: ArticleTypeEnum;
 
   @IsOptional()
   salePrice: number;

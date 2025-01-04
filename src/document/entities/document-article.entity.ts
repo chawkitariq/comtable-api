@@ -1,6 +1,6 @@
-import { Article } from 'src/article/entities/article.entity';
+import { ArticleEntity } from 'src/article/entities/article.entity';
 import { CompanyEntity } from 'src/company/entities/company.entity';
-import { Document } from 'src/document/entities/document.entity';
+import { DocumentEntity } from 'src/document/entities/document.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -9,21 +9,27 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
+import { DocumentArticleTaxEntity } from './document-article-tax.entity';
+import { ArticleTypeEnum } from 'src/article/article.type';
 
 @Entity({ name: 'document_articles' })
-export class DocumentArticle {
+export class DocumentArticleEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @Column()
-  type: string;
+  @Column({
+    type: 'enum',
+    enum: ArticleTypeEnum,
+  })
+  type: ArticleTypeEnum;
 
   @Column({ type: 'text', nullable: true })
   description?: string;
@@ -49,17 +55,23 @@ export class DocumentArticle {
   @Column({ type: 'integer', default: 0 })
   total: string;
 
+  @OneToMany(
+    () => DocumentArticleTaxEntity,
+    (documentArticleTaxEntity) => documentArticleTaxEntity.documentArticle,
+  )
+  taxes?: Relation<DocumentArticleTaxEntity[]>;
+
   @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })
   company?: Relation<CompanyEntity>;
 
-  @ManyToOne(() => Document, { nullable: true })
+  @ManyToOne(() => DocumentEntity, { nullable: true })
   @JoinColumn({ name: 'document_id' })
-  document?: Relation<Document>;
+  document?: Relation<DocumentEntity>;
 
-  @ManyToOne(() => Article, { nullable: true })
+  @ManyToOne(() => ArticleEntity, { nullable: true })
   @JoinColumn({ name: 'article_id' })
-  article?: Relation<Article>;
+  article?: Relation<ArticleEntity>;
 
   @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })

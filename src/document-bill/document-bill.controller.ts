@@ -11,6 +11,7 @@ import { CompanyService } from 'src/company/company.service';
 import { DocumentService } from 'src/document/document.service';
 import { CreateDocumentBillDto } from './dtos/create-document-bill.dto';
 import { UpdateDocumentBillDto } from './dtos/update-document-bill.dto';
+import { DocumentTypeEnum } from 'src/document/document.type';
 
 @Controller()
 export class DocumentBillController {
@@ -27,14 +28,14 @@ export class DocumentBillController {
     const company = await this.companyService.findOne(companyId);
     return this.documentService.create({
       ...createDocumentDto,
-      type: 'bill',
+      type: DocumentTypeEnum.Bill,
       company,
     });
   }
 
   @Get('/companies/:companyId/bills')
   findAll(@Param('companyId') companyId: string) {
-    return this.documentService.findAllByCompany(companyId);
+    return this.documentService.findAll(companyId);
   }
 
   @Get('/bills/:billId')

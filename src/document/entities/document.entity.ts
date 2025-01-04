@@ -14,10 +14,11 @@ import {
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
-import { DocumentArticle } from './document-article.entity';
+import { DocumentArticleEntity } from './document-article.entity';
+import { DocumentStatusEnum, DocumentTypeEnum } from '../document.type';
 
 @Entity({ name: 'documents' })
-export class Document {
+export class DocumentEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -27,11 +28,18 @@ export class Document {
   @Column({ name: 'order_number', nullable: true })
   orderNumber?: string;
 
-  @Column({ default: 'invoice' })
-  type: string;
+  @Column({
+    type: 'enum',
+    enum: DocumentTypeEnum,
+  })
+  type: DocumentTypeEnum;
 
-  @Column({ default: 'unpaid' })
-  status: string;
+  @Column({
+    type: 'enum',
+    enum: DocumentStatusEnum,
+    default: DocumentStatusEnum.Draft,
+  })
+  status: DocumentStatusEnum;
 
   @Column({ name: 'issued_at', type: 'timestamptz', nullable: true })
   issuedAt: Date;
@@ -88,10 +96,10 @@ export class Document {
   color?: string;
 
   @OneToMany(
-    () => DocumentArticle,
-    (documentArticle) => documentArticle.document,
+    () => DocumentArticleEntity,
+    (documentArticleEntity) => documentArticleEntity.document,
   )
-  articles?: Relation<DocumentArticle[]>;
+  articles?: Relation<DocumentArticleEntity[]>;
 
   @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })

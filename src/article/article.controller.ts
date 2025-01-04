@@ -40,7 +40,7 @@ export class ArticleController {
 
   @Get('companies/:companyId/articles')
   async findAll(@Param('companyId') companyId: string) {
-    return this.articleService.findAllByCompany(companyId);
+    return this.articleService.findAll(companyId);
   }
 
   @Get('/articles/:articleId')

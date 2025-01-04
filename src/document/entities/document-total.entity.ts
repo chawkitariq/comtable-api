@@ -1,5 +1,5 @@
 import { CompanyEntity } from 'src/company/entities/company.entity';
-import { Document } from 'src/document/entities/document.entity';
+import { DocumentEntity } from 'src/document/entities/document.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -40,9 +40,9 @@ export class DocumentTotal {
   @JoinColumn({ name: 'company_id' })
   company?: Relation<CompanyEntity>;
 
-  @ManyToOne(() => Document, { nullable: true })
+  @ManyToOne(() => DocumentEntity, { nullable: true })
   @JoinColumn({ name: 'document_id' })
-  document?: Relation<Document>;
+  document?: Relation<DocumentEntity>;
 
   @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })

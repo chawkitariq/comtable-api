@@ -33,7 +33,7 @@ export class DocumentController {
 
   @Get('/companies/:companyId/documents')
   findAll(@Param('companyId') companyId: string) {
-    return this.documentService.findAllByCompany(companyId);
+    return this.documentService.findAll(companyId);
   }
 
   @Get('/documents/:documentId')

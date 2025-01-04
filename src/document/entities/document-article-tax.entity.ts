@@ -1,7 +1,8 @@
 import { CompanyEntity } from 'src/company/entities/company.entity';
-import { DocumentArticle } from 'src/document/entities/document-article.entity';
-import { Document } from 'src/document/entities/document.entity';
+import { DocumentArticleEntity } from 'src/document/entities/document-article.entity';
+import { DocumentEntity } from 'src/document/entities/document.entity';
 import { TaxEntity } from 'src/tax/entities/tax.entity';
+import { TaxTypeEnum } from 'src/tax/tax.type';
 import { UserEntity } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -16,14 +17,14 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'document_article_taxes' })
-export class DocumentArticleTax {
+export class DocumentArticleTaxEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: TaxTypeEnum })
   type: string;
 
   @Column({ type: 'integer', default: 0 })
@@ -33,13 +34,13 @@ export class DocumentArticleTax {
   @JoinColumn({ name: 'company_id' })
   company?: Relation<CompanyEntity>;
 
-  @ManyToOne(() => Document, { nullable: true })
+  @ManyToOne(() => DocumentEntity, { nullable: true })
   @JoinColumn({ name: 'document_id' })
-  document?: Relation<Document>;
+  document?: Relation<DocumentEntity>;
 
-  @ManyToOne(() => DocumentArticle, { nullable: true })
+  @ManyToOne(() => DocumentArticleEntity, { nullable: true })
   @JoinColumn({ name: 'document_article_id' })
-  documentArticle?: Relation<DocumentArticle>;
+  documentArticle?: Relation<DocumentArticleEntity>;
 
   @ManyToOne(() => TaxEntity, { nullable: true })
   @JoinColumn({ name: 'tax_id' })

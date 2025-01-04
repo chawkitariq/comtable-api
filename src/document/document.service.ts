@@ -3,21 +3,21 @@ import { CreateDocumentDto } from './dtos/create-document.dto';
 import { UpdateDocumentDto } from './dtos/update-document.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
-import { Document } from './entities/document.entity';
-import { DocumentArticle } from './entities/document-article.entity';
-import { DocumentArticleTax } from './entities/document-article-tax.entity';
+import { DocumentEntity } from './entities/document.entity';
+import { DocumentArticleEntity } from './entities/document-article.entity';
+import { DocumentArticleTaxEntity } from './entities/document-article-tax.entity';
 import { CreateDocumentArticleDto } from './dtos/create-document-article.dto';
 import { CreateDocumentArticleTaxDto } from './dtos/create-document-article-tax.dto';
 
 @Injectable()
 export class DocumentService {
   constructor(
-    @InjectRepository(Document)
-    public readonly documentRepository: Repository<Document>,
-    @InjectRepository(DocumentArticle)
-    public readonly documentArticleRepository: Repository<DocumentArticle>,
-    @InjectRepository(DocumentArticleTax)
-    public readonly documentArticleTaxRepository: Repository<DocumentArticleTax>,
+    @InjectRepository(DocumentEntity)
+    public readonly documentRepository: Repository<DocumentEntity>,
+    @InjectRepository(DocumentArticleEntity)
+    public readonly documentArticleRepository: Repository<DocumentArticleEntity>,
+    @InjectRepository(DocumentArticleTaxEntity)
+    public readonly documentArticleTaxRepository: Repository<DocumentArticleTaxEntity>,
   ) {}
 
   async create({ articles = [], ...dto }: CreateDocumentDto) {
@@ -26,13 +26,13 @@ export class DocumentService {
   }
 
   async createBulkDocumentArticle(
-    document: Document,
-    articles: CreateDocumentArticleDto[],
+    document: DocumentEntity,
+    dtos: CreateDocumentArticleDto[],
   ) {
     await this.documentArticleRepository.manager.transaction(
       async (manager) => {
-        for (const dto of articles) {
-          const documentArticle = await manager.save(DocumentArticle, {
+        for (const dto of dtos) {
+          const documentArticle = await manager.save(DocumentArticleEntity, {
             ...dto,
             document,
           });
@@ -50,12 +50,12 @@ export class DocumentService {
 
   async createBulkDocumentArticleTax(
     manager: EntityManager,
-    documentArticle: DocumentArticle,
-    taxes: CreateDocumentArticleTaxDto[],
+    documentArticle: DocumentArticleEntity,
+    dtos: CreateDocumentArticleTaxDto[],
   ) {
     await manager.transaction(async (transactionManager) => {
-      for (const dto of taxes) {
-        await transactionManager.save(DocumentArticleTax, {
+      for (const dto of dtos) {
+        await transactionManager.save(DocumentArticleTaxEntity, {
           ...dto,
           documentArticle,
         });
@@ -63,7 +63,7 @@ export class DocumentService {
     });
   }
 
-  findAllByCompany(companyId: string) {
+  findAll(companyId: string) {
     return this.documentRepository.find({
       where: {
         company: { id: companyId },

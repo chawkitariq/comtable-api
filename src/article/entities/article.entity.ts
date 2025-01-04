@@ -13,18 +13,22 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { ArticleTypeEnum } from '../article.type';
 
 @Entity({ name: 'articles' })
 @Unique(['company', 'sku', 'deletedAt'])
-export class Article {
+export class ArticleEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @Column({ default: 'product' })
-  type: string;
+  @Column({
+    type: 'enum',
+    enum: ArticleTypeEnum,
+  })
+  type: ArticleTypeEnum;
 
   @Column({ nullable: true })
   sku?: string;
