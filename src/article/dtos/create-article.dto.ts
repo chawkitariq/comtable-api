@@ -2,7 +2,6 @@ import {
   IsArray,
   IsDefined,
   IsEnum,
-  IsIn,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -19,7 +18,7 @@ export class CreateArticleDto {
   name: string;
 
   @IsDefined()
-  @IsEnum([ArticleTypeEnum])
+  @IsEnum(ArticleTypeEnum)
   type: ArticleTypeEnum;
 
   @IsOptional()

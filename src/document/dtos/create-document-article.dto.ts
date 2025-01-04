@@ -18,7 +18,7 @@ export class CreateDocumentArticleDto {
   name: string;
 
   @IsDefined()
-  @IsEnum([ArticleTypeEnum])
+  @IsEnum(ArticleTypeEnum)
   type: ArticleTypeEnum;
 
   @IsOptional()
