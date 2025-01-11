@@ -10,35 +10,52 @@ import { CreateDocumentArticleTaxDto } from './dtos/create-document-article-tax.
 export class DocumentArticleTaxService {
   constructor(
     @InjectRepository(DocumentArticleTaxEntity)
-    public readonly documentArticleTaxRepository: Repository<DocumentArticleTaxEntity>,
+    public readonly repository: Repository<DocumentArticleTaxEntity>,
   ) {}
+
+  findAllByDocumentArticle(documentArticleId: string) {
+    return this.repository.find({
+      where: {
+        documentArticle: { id: documentArticleId },
+      },
+      relations: ['company', 'document', 'documentArticle', 'tax', 'createdBy'],
+    });
+  }
 
   async createMany(
     manager: EntityManager,
     documentArticle: DocumentArticleEntity,
     dtos: CreateDocumentArticleTaxDto[] = [],
-    onEach?: (
-      dto: CreateDocumentArticleTaxDto,
-      documentArticleTax: DocumentArticleTaxEntity,
-    ) => Promise<any>,
   ) {
-    for (const dto of dtos) {
-      const documentArticleTax = await manager.save(DocumentArticleTaxEntity, {
+    const documentArticles = dtos.map((dto) =>
+      manager.save(DocumentArticleTaxEntity, {
         ...dto,
         documentArticle,
-      });
-      onEach?.(dto, documentArticleTax);
-    }
+      }),
+    );
+
+    return Promise.all(documentArticles);
   }
 
   async updateMany(
     manager: EntityManager,
     dtos: UpdateDocumentArticleTaxDto[] = [],
-    onEach?: (dto: UpdateDocumentArticleTaxDto) => Promise<any>,
   ) {
-    for (const { id, ...dto } of dtos) {
-      await manager.update(DocumentArticleTaxEntity, id, dto);
-      onEach?.({ ...dto, id });
-    }
+    const documentArticles = dtos.map(({ id, ...dto }) =>
+      manager.update(DocumentArticleTaxEntity, id, dto),
+    );
+
+    return Promise.all(documentArticles);
+  }
+
+  async removeMany(
+    manager: EntityManager,
+    documentArticleTaxIds: string[] = [],
+  ) {
+    const documentArticles = documentArticleTaxIds.map((id) =>
+      manager.softDelete(DocumentArticleTaxEntity, id),
+    );
+
+    return Promise.all(documentArticles);
   }
 }

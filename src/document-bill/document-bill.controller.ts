@@ -7,40 +7,38 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { CompanyService } from 'src/company/company.service';
-import { DocumentService } from 'src/document/document.service';
 import { CreateDocumentBillDto } from './dtos/create-document-bill.dto';
 import { UpdateDocumentBillDto } from './dtos/update-document-bill.dto';
 import { DocumentTypeEnum } from 'src/document/document.type';
+import { DocumentController } from 'src/document/document.controller';
+import { UserEntity } from 'src/user/entities/user.entity';
+import { User } from 'src/authentication/decorators/user.decrator';
 
 @Controller()
 export class DocumentBillController {
-  constructor(
-    private readonly documentService: DocumentService,
-    private readonly companyService: CompanyService,
-  ) {}
+  constructor(private readonly documentController: DocumentController) {}
 
   @Post('/companies/:companyId/bills')
   async create(
+    @User() user: UserEntity,
     @Param('companyId') companyId: string,
     @Body() createDocumentDto: CreateDocumentBillDto,
   ) {
-    const company = await this.companyService.findOne(companyId);
-    return this.documentService.create({
+    return this.documentController.create(companyId, {
       ...createDocumentDto,
       type: DocumentTypeEnum.Bill,
-      company,
+      createdBy: user,
     });
   }
 
   @Get('/companies/:companyId/bills')
   findAll(@Param('companyId') companyId: string) {
-    return this.documentService.findAll(companyId);
+    return this.documentController.findAll(companyId);
   }
 
   @Get('/bills/:billId')
   findOne(@Param('billId') billId: string) {
-    return this.documentService.findOne(billId);
+    return this.documentController.findOne(billId);
   }
 
   @Patch('/bills/:billId')
@@ -48,11 +46,11 @@ export class DocumentBillController {
     @Param('billId') billId: string,
     @Body() updateDocumentDto: UpdateDocumentBillDto,
   ) {
-    return this.documentService.update(billId, updateDocumentDto);
+    return this.documentController.update(billId, updateDocumentDto);
   }
 
   @Delete('/bills/:billId')
   remove(@Param('billId') billId: string) {
-    return this.documentService.remove(billId);
+    return this.documentController.remove(billId);
   }
 }

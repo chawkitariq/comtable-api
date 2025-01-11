@@ -10,35 +10,52 @@ import { UpdateDocumentArticleDto } from './dtos/update-document-article.dto';
 export class DocumentArticleService {
   constructor(
     @InjectRepository(DocumentArticleEntity)
-    public readonly documentArticleRepository: Repository<DocumentArticleEntity>,
+    public readonly repository: Repository<DocumentArticleEntity>,
   ) {}
+
+  findAllByDocument(documentId: string) {
+    return this.repository.findOne({
+      where: {
+        document: { id: documentId },
+      },
+      relations: ['taxes', 'company', 'document', 'article', 'createdBy'],
+    });
+  }
+
+  findOne(documentArticleId: string) {
+    return this.repository.findOne({
+      where: {
+        id: documentArticleId,
+      },
+      relations: ['taxes', 'company', 'document', 'article', 'createdBy'],
+    });
+  }
 
   async createMany(
     manager: EntityManager,
     document: DocumentEntity,
     dtos: CreateDocumentArticleDto[] = [],
-    onEach?: (
-      dto: CreateDocumentArticleDto,
-      documentArticle: DocumentArticleEntity,
-    ) => Promise<any>,
   ) {
     for (const dto of dtos) {
-      const documentArticle = await manager.save(DocumentArticleEntity, {
+      await manager.save(DocumentArticleEntity, {
         ...dto,
         document,
       });
-      onEach?.(dto, documentArticle);
     }
   }
 
   async updateMany(
     manager: EntityManager,
     dtos: UpdateDocumentArticleDto[] = [],
-    onEach?: (dto: UpdateDocumentArticleDto) => Promise<any>,
   ) {
     for (const { id, ...dto } of dtos) {
       await manager.update(DocumentArticleEntity, id, dto);
-      onEach?.({ ...dto, id });
+    }
+  }
+
+  async removeMany(manager: EntityManager, documentArticleIds: string[] = []) {
+    for (const id of documentArticleIds) {
+      await manager.softDelete(DocumentArticleEntity, id);
     }
   }
 }

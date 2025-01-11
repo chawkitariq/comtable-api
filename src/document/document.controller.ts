@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { DocumentService } from './document.service';
 import { CreateDocumentDto } from './dtos/create-document.dto';
@@ -22,17 +24,28 @@ export class DocumentController {
   @Post('/companies/:companyId/documents')
   async create(
     @Param('companyId') companyId: string,
-    @Body() createDocumentDto: CreateDocumentDto,
+    @Body() dto: CreateDocumentDto,
   ) {
     const company = await this.companyService.findOne(companyId);
+
+    if (!company) {
+      throw new BadRequestException('Company does not exists');
+    }
+
     return this.documentService.create({
-      ...createDocumentDto,
+      ...dto,
       company,
     });
   }
 
   @Get('/companies/:companyId/documents')
-  findAll(@Param('companyId') companyId: string) {
+  async findAll(@Param('companyId') companyId: string) {
+    const company = await this.companyService.findOne(companyId);
+
+    if (!company) {
+      throw new NotFoundException('Company not found');
+    }
+
     return this.documentService.findAll(companyId);
   }
 
@@ -44,9 +57,9 @@ export class DocumentController {
   @Patch('/documents/:documentId')
   update(
     @Param('documentId') documentId: string,
-    @Body() updateDocumentDto: UpdateDocumentDto,
+    @Body() dto: UpdateDocumentDto,
   ) {
-    return this.documentService.update(documentId, updateDocumentDto);
+    return this.documentService.update(documentId, dto);
   }
 
   @Delete('/documents/:documentId')
