@@ -30,9 +30,9 @@ export class CompanyService {
     return this.companyRepository.findOne({ where: { id } });
   }
 
-  findOneByUser(id: string, userId: string) {
+  findOneByUser(companyId: string, userId: string) {
     return this.companyRepository.findOne({
-      where: { id, createdBy: { id: userId } },
+      where: { id: companyId, createdBy: { id: userId } },
     });
   }
 

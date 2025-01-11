@@ -16,7 +16,7 @@ export class CategoryService {
     return this.categoryRepository.save(createCategoryDto);
   }
 
-  findAll(companyId: string) {
+  findAllByCompany(companyId: string) {
     return this.categoryRepository.find({
       where: { company: { id: companyId } },
       relations: ['company', 'createdBy'],
@@ -24,7 +24,22 @@ export class CategoryService {
   }
 
   findOne(id: string) {
-    return this.categoryRepository.findOne({ where: { id } });
+    return this.categoryRepository.findOne({
+      where: { id },
+      relations: ['company', 'createdBy'],
+    });
+  }
+
+  findOneByUser(categoryId: string, userId: string) {
+    return this.categoryRepository.findOne({
+      where: {
+        id: categoryId,
+        company: {
+          createdBy: { id: userId },
+        },
+      },
+      relations: ['company', 'createdBy'],
+    });
   }
 
   update(id: string, updateCategoryDto: UpdateCategoryDto) {
