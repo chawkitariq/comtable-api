@@ -3,21 +3,19 @@ import { DocumentService } from './document.service';
 import { DocumentEntity } from './entities/document.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CompanyModule } from 'src/company/company.module';
-import { DocumentArticleEntity } from './entities/document-article.entity';
-import { DocumentArticleTaxEntity } from './entities/document-article-tax.entity';
 import { DocumentTotal } from './entities/document-total.entity';
+import { DocumentArticleModule } from 'src/document-article/document-article.module';
+import { DocumentArticleTaxModule } from 'src/document-article-tax/document-article-tax.module';
+import { DocumentController } from './document.controller';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      DocumentEntity,
-      DocumentArticleEntity,
-      DocumentArticleTaxEntity,
-      DocumentTotal,
-    ]),
+    TypeOrmModule.forFeature([DocumentEntity, DocumentTotal]),
     CompanyModule,
+    DocumentArticleModule,
+    DocumentArticleTaxModule,
   ],
-  // controllers: [DocumentController],
+  controllers: [DocumentController],
   providers: [DocumentService],
   exports: [DocumentService],
 })

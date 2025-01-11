@@ -3,9 +3,9 @@ import { CategoryEntity } from 'src/category/entities/category.entity';
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { ContactEntity } from 'src/contact/entities/contact.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
-import { CreateDocumentArticleDto } from './create-document-article.dto';
 import { Type } from 'class-transformer';
 import { DocumentStatusEnum, DocumentTypeEnum } from '../document.type';
+import { CreateDocumentArticleDto } from 'src/document-article/dtos/create-document-article.dto';
 
 export class CreateDocumentDto {
   @IsOptional()

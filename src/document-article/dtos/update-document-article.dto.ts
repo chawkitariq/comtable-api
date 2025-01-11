@@ -1,8 +1,8 @@
 import { OmitType, PartialType } from '@nestjs/swagger';
 import { CreateDocumentArticleDto } from './create-document-article.dto';
-import { UpdateDocumentArticleTaxDto } from './update-document-article-tax.dto';
 import { IsArray, IsOptional, IsUUID, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { UpdateDocumentArticleTaxDto } from 'src/document-article-tax/dtos/update-document-article-tax.dto';
 
 export class UpdateDocumentArticleDto extends PartialType(
   OmitType(CreateDocumentArticleDto, ['taxes']),

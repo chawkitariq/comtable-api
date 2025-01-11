@@ -1,5 +1,5 @@
 import { CompanyEntity } from 'src/company/entities/company.entity';
-import { DocumentArticleEntity } from 'src/document/entities/document-article.entity';
+import { DocumentArticleEntity } from 'src/document-article/entities/document-article.entity';
 import { DocumentEntity } from 'src/document/entities/document.entity';
 import { TaxEntity } from 'src/tax/entities/tax.entity';
 import { TaxTypeEnum } from 'src/tax/tax.type';

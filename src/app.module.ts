@@ -21,6 +21,8 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DocumentInvoiceModule } from './document-invoice/document-invoice.module';
 import { DocumentBillModule } from './document-bill/document-bill.module';
 import { ArticleModule } from './article/article.module';
+import { DocumentArticleModule } from './document-article/document-article.module';
+import { DocumentArticleTaxModule } from './document-article-tax/document-article-tax.module';
 
 @Module({
   imports: [
@@ -35,13 +37,15 @@ import { ArticleModule } from './article/article.module';
     PermissionModule,
     CurrencyModule,
     DocumentModule,
+    DocumentArticleModule,
+    DocumentArticleTaxModule,
+    DocumentInvoiceModule,
+    DocumentBillModule,
     TransactionModule,
     ContactModule,
     AuthenticationModule,
     AuthorizationModule,
     AccountModule,
-    DocumentInvoiceModule,
-    DocumentBillModule,
     ArticleModule,
   ],
   controllers: [AppController],

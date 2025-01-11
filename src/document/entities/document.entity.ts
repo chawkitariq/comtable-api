@@ -14,8 +14,8 @@ import {
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
-import { DocumentArticleEntity } from './document-article.entity';
 import { DocumentStatusEnum, DocumentTypeEnum } from '../document.type';
+import { DocumentArticleEntity } from 'src/document-article/entities/document-article.entity';
 
 @Entity({ name: 'documents' })
 export class DocumentEntity {
