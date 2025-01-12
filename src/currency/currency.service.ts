@@ -3,32 +3,46 @@ import { CreateCurrencyDto } from './dtos/create-currency.dto';
 import { UpdateCurrencyDto } from './dtos/update-currency.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Currency } from './entities/currency.entity';
+import { CurrencyEntity } from './entities/currency.entity';
 
 @Injectable()
 export class CurrencyService {
   constructor(
-    @InjectRepository(Currency)
-    public readonly currencyRepository: Repository<Currency>,
+    @InjectRepository(CurrencyEntity)
+    public readonly repository: Repository<CurrencyEntity>,
   ) {}
 
   create(dto: CreateCurrencyDto) {
-    return this.currencyRepository.save(dto);
+    return this.repository.save(dto);
   }
 
   findAll() {
-    return this.currencyRepository.find();
+    return this.repository.find({
+      relations: ['company', 'createdBy'],
+    });
+  }
+
+  findAllByCompany(companyId: string) {
+    return this.repository.find({
+      where: {
+        company: { id: companyId },
+      },
+      relations: ['company', 'createdBy'],
+    });
   }
 
   findOne(id: string) {
-    return this.currencyRepository.findOne({ where: { id } });
+    return this.repository.findOne({
+      where: { id },
+      relations: ['company', 'createdBy'],
+    });
   }
 
   update(id: string, dto: UpdateCurrencyDto) {
-    return this.currencyRepository.update(id, dto);
+    return this.repository.update(id, dto);
   }
 
   remove(id: string) {
-    return this.currencyRepository.softDelete(id);
+    return this.repository.softDelete(id);
   }
 }

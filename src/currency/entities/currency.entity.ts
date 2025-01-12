@@ -11,9 +11,10 @@ import {
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
+import { CurrencySymbolPositionEnum } from '../currency.type';
 
 @Entity({ name: 'currencies' })
-export class Currency {
+export class CurrencyEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -26,14 +27,19 @@ export class Currency {
   @Column({ nullable: true })
   symbol?: string;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'decimal', precision: 15, scale: 8 })
   rate: number;
 
   @Column({ nullable: true })
   precision?: string;
 
-  @Column({ name: 'symbol_first', type: 'integer', default: 1 })
-  symbolFirst: number;
+  @Column({
+    name: 'symbol_position',
+    type: 'enum',
+    enum: CurrencySymbolPositionEnum,
+    default: CurrencySymbolPositionEnum.End,
+  })
+  symbolPosition: CurrencySymbolPositionEnum;
 
   @Column({ name: 'decimal_mark', nullable: true })
   decimalMark?: string;
