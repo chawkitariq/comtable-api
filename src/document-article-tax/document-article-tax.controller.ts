@@ -13,6 +13,7 @@ import { DocumentArticleTaxService } from './document-article-tax.service';
 import { DocumentArticleService } from 'src/document-article/document-article.service';
 import { CreateManyDocumentArticleTaxDto } from './dtos/create-document-article-tax.dto';
 import { UpdateManyDocumentArticleTaxDto } from './dtos/update-document-article-tax.dto';
+import { RemoveManyDocumentArticleTaxDto } from './dtos/remove-many-document-article-tax.dto';
 
 @Controller()
 export class DocumentArticleTaxController {
@@ -71,10 +72,15 @@ export class DocumentArticleTaxController {
   }
 
   @Delete('/documentarticletaxes')
-  removeMany(@Body() documentArticleIds: string[]) {
+  removeMany(
+    @Body() { documentArticleTaxIds }: RemoveManyDocumentArticleTaxDto,
+  ) {
     return this.documentArticleTaxService.repository.manager.transaction(
       (manager) =>
-        this.documentArticleTaxService.removeMany(manager, documentArticleIds),
+        this.documentArticleTaxService.removeMany(
+          manager,
+          documentArticleTaxIds,
+        ),
     );
   }
 }

@@ -13,6 +13,7 @@ import { CreateManyDocumentArticleDto } from './dtos/create-document-article.dto
 import { DocumentService } from 'src/document/document.service';
 import { DocumentArticleService } from './document-article.service';
 import { UpdateManyDocumentArticleDto } from './dtos/update-document-article.dto';
+import { RemoveManyDocumentArticleDto } from './dtos/remove-many-document-article.dto';
 
 @Controller()
 export class DocumentArticleController {
@@ -62,7 +63,10 @@ export class DocumentArticleController {
   }
 
   @Delete('/documentarticles')
-  removeMany(@Body() documentArticleIds: string[]) {
+  removeMany(
+    @Body()
+    { documentArticleIds }: RemoveManyDocumentArticleDto,
+  ) {
     return this.documentArticleService.repository.manager.transaction(
       (manager) =>
         this.documentArticleService.removeMany(manager, documentArticleIds),

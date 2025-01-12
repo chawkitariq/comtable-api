@@ -14,7 +14,7 @@ export class DocumentArticleService {
   ) {}
 
   findAllByDocument(documentId: string) {
-    return this.repository.findOne({
+    return this.repository.find({
       where: {
         document: { id: documentId },
       },
