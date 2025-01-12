@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { UserModule } from 'src/user/user.module';
 import { PassportModule } from '@nestjs/passport';
-import { LocalAuthenticationStrategy } from './strategies/local.strategy';
+import { AuthenticationLocalStrategy } from './strategies/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtAuthenticationStrategy } from './strategies/jwt.strategy';
+import { AuthenticationJwtStrategy } from './strategies/jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthenticationGuard } from './guards/jwt.guard';
+import { AuthenticationJwtGuard } from './guards/jwt.guard';
 import { AuthenticationController } from './authentication.controller';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
@@ -25,12 +25,12 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
   ],
   providers: [
     AuthenticationService,
-    LocalAuthenticationStrategy,
-    JwtAuthenticationStrategy,
-    JwtAuthenticationGuard,
+    AuthenticationLocalStrategy,
+    AuthenticationJwtStrategy,
+    AuthenticationJwtGuard,
     {
       provide: APP_GUARD,
-      useExisting: JwtAuthenticationGuard,
+      useExisting: AuthenticationJwtGuard,
     },
   ],
   controllers: [AuthenticationController],
