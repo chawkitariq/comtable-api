@@ -7,7 +7,7 @@ import ms from 'ms';
 import AuthenticationRegisterDto from './dtos/register.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import AuthenticationRegisteredEvent from './events/registered.event';
-import AuthenticationLoginedEvent from './events/logined.event';
+import AuthenticationLoggedInEvent from './events/logged-in.event';
 
 @Injectable()
 export class AuthenticationService {
@@ -53,8 +53,8 @@ export class AuthenticationService {
     const expiredAt = Math.floor(Date.now() / 1000) + expiresIn;
 
     this.eventEmitter.emit(
-      AuthenticationLoginedEvent.name,
-      new AuthenticationLoginedEvent(user.id),
+      AuthenticationLoggedInEvent.name,
+      new AuthenticationLoggedInEvent(user.id),
     );
 
     return {

@@ -1,3 +1,3 @@
-export default class AuthenticationLoginedEvent {
+export default class AuthenticationLoggedInEvent {
   constructor(public readonly userId: string) {}
 }
