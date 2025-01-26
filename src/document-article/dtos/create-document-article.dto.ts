@@ -11,6 +11,7 @@ import {
 import { Type } from 'class-transformer';
 import { ArticleTypeEnum } from 'src/article/article.type';
 import { DocumentEntity } from 'src/document/entities/document.entity';
+import { CreateDocumentArticleTaxDto } from 'src/document-article-tax/dtos/create-document-article-tax.dto';
 
 export class CreateDocumentArticleDto {
   @IsOptional()
@@ -32,16 +33,14 @@ export class CreateDocumentArticleDto {
   @IsOptional()
   total: string;
 
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateDocumentArticleTaxDto)
+  taxes?: CreateDocumentArticleTaxDto[];
+
   company?: CompanyEntity;
   document?: DocumentEntity;
   article?: ArticleEntity;
   createdBy?: UserEntity;
-}
-
-export class CreateManyDocumentArticleDto {
-  @IsDefined()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateDocumentArticleDto)
-  documentArticles: CreateDocumentArticleDto[];
 }

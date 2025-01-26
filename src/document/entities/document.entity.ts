@@ -98,6 +98,9 @@ export class DocumentEntity {
   @OneToMany(
     () => DocumentArticleEntity,
     (documentArticleEntity) => documentArticleEntity.document,
+    {
+      cascade: true,
+    },
   )
   articles?: Relation<DocumentArticleEntity[]>;
 

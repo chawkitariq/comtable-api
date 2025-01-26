@@ -58,6 +58,7 @@ export class DocumentArticleEntity {
   @OneToMany(
     () => DocumentArticleTaxEntity,
     (documentArticleTaxEntity) => documentArticleTaxEntity.documentArticle,
+    { cascade: true },
   )
   taxes?: Relation<DocumentArticleTaxEntity[]>;
 

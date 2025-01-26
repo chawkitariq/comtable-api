@@ -1,20 +1,20 @@
 import { PartialType } from '@nestjs/swagger';
 import { CreateDocumentArticleDto } from './create-document-article.dto';
-import { IsArray, IsDefined, IsUUID, ValidateNested } from 'class-validator';
+import { IsArray, IsOptional, IsUUID, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { UpdateDocumentArticleTaxDto } from 'src/document-article-tax/dtos/update-document-article-tax.dto';
+import { OmitType } from '@nestjs/mapped-types';
 
 export class UpdateDocumentArticleDto extends PartialType(
-  CreateDocumentArticleDto,
+  OmitType(CreateDocumentArticleDto, ['taxes']),
 ) {
-  @IsDefined()
+  @IsOptional()
   @IsUUID('4')
   id: string;
-}
 
-export class UpdateManyDocumentArticleDto {
-  @IsDefined()
+  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => UpdateDocumentArticleDto)
-  documentArticles: UpdateDocumentArticleDto[];
+  @Type(() => UpdateDocumentArticleTaxDto)
+  taxes?: UpdateDocumentArticleTaxDto[];
 }

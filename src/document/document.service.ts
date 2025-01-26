@@ -4,39 +4,71 @@ import { UpdateDocumentDto } from './dtos/update-document.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DocumentEntity } from './entities/document.entity';
+import { DocumentArticleService } from 'src/document-article/document-article.service';
+import { DocumentArticleTaxService } from 'src/document-article-tax/document-article-tax.service';
 
 @Injectable()
 export class DocumentService {
   constructor(
     @InjectRepository(DocumentEntity)
-    public readonly documentRepository: Repository<DocumentEntity>,
+    public readonly repository: Repository<DocumentEntity>,
+    public readonly documentArticleService: DocumentArticleService,
+    public readonly documentArticleTaxService: DocumentArticleTaxService,
   ) {}
 
   create(dto: CreateDocumentDto) {
-    return this.documentRepository.save(dto);
+    const document = this.repository.create({
+      ...dto,
+      ...(dto.articles && {
+        articles: this.documentArticleService.repository.create(
+          dto.articles.map((article) => ({
+            ...article,
+            ...(article.taxes && {
+              taxes: this.documentArticleTaxService.repository.create(
+                article.taxes,
+              ),
+            }),
+          })),
+        ),
+      }),
+    });
+
+    return this.repository.save(document);
   }
 
   findAll(companyId: string) {
-    return this.documentRepository.find({
+    return this.repository.find({
       where: {
         company: { id: companyId },
       },
-      relations: ['articles', 'contact', 'category', 'company', 'createdBy'],
     });
   }
 
   findOne(id: string) {
-    return this.documentRepository.findOne({
+    return this.repository.findOne({
       where: { id },
-      relations: ['articles', 'contact', 'category', 'company', 'createdBy'],
     });
   }
 
   update(id: string, dto: UpdateDocumentDto) {
-    return this.documentRepository.update(id, dto);
+    return this.repository.save({
+      id,
+      ...(dto.articles && {
+        articles: this.documentArticleService.repository.create(
+          dto.articles.map((article) => ({
+            ...article,
+            ...(article.taxes && {
+              taxes: this.documentArticleTaxService.repository.create(
+                article.taxes,
+              ),
+            }),
+          })),
+        ),
+      }),
+    });
   }
 
   remove(id: string) {
-    return this.documentRepository.softDelete(id);
+    return this.repository.softDelete(id);
   }
 }
