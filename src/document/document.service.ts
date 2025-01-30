@@ -4,33 +4,33 @@ import { UpdateDocumentDto } from './dtos/update-document.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DocumentEntity } from './entities/document.entity';
-import { DocumentArticleService } from 'src/document-article/document-article.service';
-import { DocumentArticleTaxService } from 'src/document-article-tax/document-article-tax.service';
+import { DocumentArticleEntity } from 'src/document-article/entities/document-article.entity';
+import { DocumentArticleTaxEntity } from 'src/document-article-tax/entities/document-article-tax.entity';
 
 @Injectable()
 export class DocumentService {
   constructor(
     @InjectRepository(DocumentEntity)
     public readonly repository: Repository<DocumentEntity>,
-    public readonly documentArticleService: DocumentArticleService,
-    public readonly documentArticleTaxService: DocumentArticleTaxService,
   ) {}
 
   create(dto: CreateDocumentDto) {
+    const articles = this.repository.manager.create(
+      DocumentArticleEntity,
+      dto?.articles.map((article) => ({
+        ...article,
+        ...(article.taxes && {
+          taxes: this.repository.manager?.create(
+            DocumentArticleTaxEntity,
+            article.taxes,
+          ),
+        }),
+      })),
+    );
+
     const document = this.repository.create({
       ...dto,
-      ...(dto.articles && {
-        articles: this.documentArticleService.repository.create(
-          dto.articles.map((article) => ({
-            ...article,
-            ...(article.taxes && {
-              taxes: this.documentArticleTaxService.repository.create(
-                article.taxes,
-              ),
-            }),
-          })),
-        ),
-      }),
+      ...(articles && { articles }),
     });
 
     return this.repository.save(document);
@@ -50,22 +50,65 @@ export class DocumentService {
     });
   }
 
-  update(id: string, dto: UpdateDocumentDto) {
-    return this.repository.save({
-      id,
-      ...(dto.articles && {
-        articles: this.documentArticleService.repository.create(
-          dto.articles.map((article) => ({
-            ...article,
-            ...(article.taxes && {
-              taxes: this.documentArticleTaxService.repository.create(
+  async update(id: string, dto: UpdateDocumentDto) {
+    const { articles = [] } = dto;
+
+    // Filter out articles to remove
+    const removableDocumentArticles = articles.filter(({ remove }) => remove);
+
+    // Filter out taxes to remove
+    const removableDocumentArticleTaxes = articles
+      .flatMap(({ taxes }) => taxes ?? [])
+      .filter(({ remove }) => remove);
+
+    // Remove articles and taxes that should be removed
+    await this.repository.manager.remove(
+      [
+        ...this.repository.manager.create(
+          DocumentArticleEntity,
+          removableDocumentArticles,
+        ),
+        ...this.repository.manager.create(
+          DocumentArticleTaxEntity,
+          removableDocumentArticleTaxes,
+        ),
+      ],
+      { transaction: true },
+    );
+
+    // Prepare updatable articles, filtering out ones that are marked for removal
+    const updatableDocumentArticles = articles
+      .filter(({ remove }) => !remove)
+      .map(({ taxes, ...article }) => ({
+        ...article,
+        taxes: taxes?.filter(({ remove }) => !remove),
+      }));
+
+    // Fetch the current document to update
+    const document = await this.findOne(id);
+
+    // Combine the new and old articles
+    const updatedArticles = [
+      ...this.repository.manager.create(
+        DocumentArticleEntity,
+        updatableDocumentArticles.map((article) => ({
+          ...article,
+          ...(article.taxes && {
+            taxes: [
+              ...this.repository.manager.create(
+                DocumentArticleTaxEntity,
                 article.taxes,
               ),
-            }),
-          })),
-        ),
-      }),
-    });
+              ...document.articles.find(({ id }) => id === article.id)?.taxes,
+            ],
+          }),
+        })),
+      ),
+      ...document.articles,
+    ];
+
+    // Save the updated document with the new list of articles
+    return this.repository.save({ id, articles: updatedArticles });
   }
 
   remove(id: string) {

@@ -39,7 +39,7 @@ export class DocumentArticleTaxEntity {
   document?: Relation<DocumentEntity>;
 
   @ManyToOne(() => DocumentArticleEntity, { nullable: true })
-  @JoinColumn({ name: 'document_article_id' })
+  @JoinColumn({ referencedColumnName: 'id', name: 'document_article_id' })
   documentArticle?: Relation<DocumentArticleEntity>;
 
   @ManyToOne(() => TaxEntity, { nullable: true })

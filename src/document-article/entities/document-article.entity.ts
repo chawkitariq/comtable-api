@@ -58,7 +58,7 @@ export class DocumentArticleEntity {
   @OneToMany(
     () => DocumentArticleTaxEntity,
     (documentArticleTaxEntity) => documentArticleTaxEntity.documentArticle,
-    { cascade: true },
+    { eager: true, cascade: true, onUpdate: 'CASCADE' },
   )
   taxes?: Relation<DocumentArticleTaxEntity[]>;
 
@@ -67,7 +67,7 @@ export class DocumentArticleEntity {
   company?: Relation<CompanyEntity>;
 
   @ManyToOne(() => DocumentEntity, { nullable: true })
-  @JoinColumn({ name: 'document_id' })
+  @JoinColumn({ referencedColumnName: 'id', name: 'document_id' })
   document?: Relation<DocumentEntity>;
 
   @ManyToOne(() => ArticleEntity, { nullable: true })
