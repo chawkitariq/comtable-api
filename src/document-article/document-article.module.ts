@@ -1,17 +1,8 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { DocumentArticleService } from './document-article.service';
-import { DocumentArticleController } from './document-article.controller';
+import { Module } from '@nestjs/common';
 import { DocumentArticleEntity } from './entities/document-article.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DocumentModule } from 'src/document/document.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([DocumentArticleEntity]),
-    forwardRef(() => DocumentModule),
-  ],
-  controllers: [DocumentArticleController],
-  providers: [DocumentArticleService],
-  exports: [DocumentArticleService],
+  imports: [TypeOrmModule.forFeature([DocumentArticleEntity])],
 })
 export class DocumentArticleModule {}
