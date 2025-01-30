@@ -77,7 +77,7 @@ export class CreateDocumentDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateDocumentArticleDto)
-  articles?: CreateDocumentArticleDto[];
+  documentArticles?: CreateDocumentArticleDto[];
 
   company?: CompanyEntity;
   contact?: ContactEntity;

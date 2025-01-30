@@ -104,7 +104,7 @@ export class DocumentEntity {
       onUpdate: 'CASCADE',
     },
   )
-  articles?: Relation<DocumentArticleEntity[]>;
+  documentArticles?: Relation<DocumentArticleEntity[]>;
 
   @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })

@@ -60,7 +60,7 @@ export class DocumentArticleEntity {
     (documentArticleTaxEntity) => documentArticleTaxEntity.documentArticle,
     { eager: true, cascade: true, onUpdate: 'CASCADE' },
   )
-  taxes?: Relation<DocumentArticleTaxEntity[]>;
+  documentArticleTaxes?: Relation<DocumentArticleTaxEntity[]>;
 
   @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })

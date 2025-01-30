@@ -37,7 +37,7 @@ export class CreateDocumentArticleDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateDocumentArticleTaxDto)
-  taxes?: CreateDocumentArticleTaxDto[];
+  documentArticleTaxes?: CreateDocumentArticleTaxDto[];
 
   company?: CompanyEntity;
   document?: DocumentEntity;

@@ -15,14 +15,14 @@ export class DocumentService {
   ) {}
 
   create(dto: CreateDocumentDto) {
-    const articles = this.repository.manager.create(
+    const documentArticles = this.repository.manager.create(
       DocumentArticleEntity,
-      dto?.articles.map((article) => ({
-        ...article,
-        ...(article.taxes && {
-          taxes: this.repository.manager?.create(
+      dto?.documentArticles.map((documentArticle) => ({
+        ...documentArticle,
+        ...(documentArticle.documentArticleTaxes && {
+          documentArticleTaxes: this.repository.manager?.create(
             DocumentArticleTaxEntity,
-            article.taxes,
+            documentArticle.documentArticleTaxes,
           ),
         }),
       })),
@@ -30,7 +30,7 @@ export class DocumentService {
 
     const document = this.repository.create({
       ...dto,
-      ...(articles && { articles }),
+      ...(documentArticles && { documentArticles }),
     });
 
     return this.repository.save(document);
@@ -51,17 +51,17 @@ export class DocumentService {
   }
 
   async update(id: string, dto: UpdateDocumentDto) {
-    const { articles = [] } = dto;
+    const removableDocumentArticles = dto.documentArticles?.filter(
+      ({ remove }) => remove,
+    );
 
-    // Filter out articles to remove
-    const removableDocumentArticles = articles.filter(({ remove }) => remove);
+    const removableDocumentArticleTaxes = dto?.documentArticles
+      .filter(({ documentArticleTaxes }) =>
+        documentArticleTaxes?.some(({ remove }) => remove),
+      )
+      .flatMap(({ documentArticleTaxes }) => documentArticleTaxes)
+      .filter((remove) => remove);
 
-    // Filter out taxes to remove
-    const removableDocumentArticleTaxes = articles
-      .flatMap(({ taxes }) => taxes ?? [])
-      .filter(({ remove }) => remove);
-
-    // Remove articles and taxes that should be removed
     await this.repository.manager.remove(
       [
         ...this.repository.manager.create(
@@ -76,39 +76,42 @@ export class DocumentService {
       { transaction: true },
     );
 
-    // Prepare updatable articles, filtering out ones that are marked for removal
-    const updatableDocumentArticles = articles
-      .filter(({ remove }) => !remove)
-      .map(({ taxes, ...article }) => ({
-        ...article,
-        taxes: taxes?.filter(({ remove }) => !remove),
+    const updatableDocumentArticles = dto.documentArticles
+      ?.filter(({ remove }) => !remove)
+      .map((documentArticle) => ({
+        ...documentArticle,
+        documentArticleTaxes: documentArticle.documentArticleTaxes?.filter(
+          ({ remove }) => !remove,
+        ),
       }));
 
-    // Fetch the current document to update
     const document = await this.findOne(id);
 
-    // Combine the new and old articles
-    const updatedArticles = [
+    const documentArticles = [
       ...this.repository.manager.create(
         DocumentArticleEntity,
-        updatableDocumentArticles.map((article) => ({
-          ...article,
-          ...(article.taxes && {
-            taxes: [
+        updatableDocumentArticles?.map((documentArticle) => ({
+          ...documentArticle,
+          ...(documentArticle.documentArticleTaxes && {
+            documentArticleTaxes: [
               ...this.repository.manager.create(
                 DocumentArticleTaxEntity,
-                article.taxes,
+                documentArticle.documentArticleTaxes,
               ),
-              ...document.articles.find(({ id }) => id === article.id)?.taxes,
+              ...document.documentArticles.find(
+                ({ id }) => id === documentArticle.id,
+              ).documentArticleTaxes,
             ],
           }),
         })),
       ),
-      ...document.articles,
+      ...document.documentArticles,
     ];
 
-    // Save the updated document with the new list of articles
-    return this.repository.save({ id, articles: updatedArticles });
+    return this.repository.save({
+      id,
+      ...(documentArticles && { documentArticles }),
+    });
   }
 
   remove(id: string) {

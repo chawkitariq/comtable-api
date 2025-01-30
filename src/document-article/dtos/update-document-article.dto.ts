@@ -12,7 +12,7 @@ import { UpdateDocumentArticleTaxDto } from 'src/document-article-tax/dtos/updat
 import { OmitType } from '@nestjs/mapped-types';
 
 export class UpdateDocumentArticleDto extends PartialType(
-  OmitType(CreateDocumentArticleDto, ['taxes']),
+  OmitType(CreateDocumentArticleDto, ['documentArticleTaxes']),
 ) {
   @IsOptional()
   @IsUUID('4')
@@ -26,5 +26,5 @@ export class UpdateDocumentArticleDto extends PartialType(
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => UpdateDocumentArticleTaxDto)
-  taxes?: UpdateDocumentArticleTaxDto[];
+  documentArticleTaxes?: UpdateDocumentArticleTaxDto[];
 }
