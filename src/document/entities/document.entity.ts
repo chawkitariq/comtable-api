@@ -101,7 +101,6 @@ export class DocumentEntity {
     {
       eager: true,
       cascade: true,
-      onUpdate: 'CASCADE',
     },
   )
   documentArticles?: Relation<DocumentArticleEntity[]>;
