@@ -101,6 +101,7 @@ export class DocumentEntity {
     {
       eager: true,
       cascade: true,
+      orphanedRowAction: 'soft-delete',
     },
   )
   documentArticles?: Relation<DocumentArticleEntity[]>;

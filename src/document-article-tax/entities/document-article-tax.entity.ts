@@ -25,7 +25,7 @@ export class DocumentArticleTaxEntity {
   name: string;
 
   @Column({ type: 'enum', enum: TaxTypeEnum })
-  type: string;
+  type: TaxTypeEnum;
 
   @Column({ type: 'integer', default: 0 })
   amount: number;
@@ -38,7 +38,10 @@ export class DocumentArticleTaxEntity {
   @JoinColumn({ name: 'document_id' })
   document?: Relation<DocumentEntity>;
 
-  @ManyToOne(() => DocumentArticleEntity, { nullable: true })
+  @ManyToOne(() => DocumentArticleEntity, {
+    nullable: true,
+    orphanedRowAction: 'soft-delete',
+  })
   @JoinColumn({ referencedColumnName: 'id', name: 'document_article_id' })
   documentArticle?: Relation<DocumentArticleEntity>;
 

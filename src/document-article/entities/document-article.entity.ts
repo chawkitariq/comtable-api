@@ -58,7 +58,7 @@ export class DocumentArticleEntity {
   @OneToMany(
     () => DocumentArticleTaxEntity,
     (documentArticleTaxEntity) => documentArticleTaxEntity.documentArticle,
-    { eager: true, cascade: true },
+    { eager: true, cascade: true, orphanedRowAction: 'soft-delete' },
   )
   documentArticleTaxes?: Relation<DocumentArticleTaxEntity[]>;
 
@@ -66,7 +66,10 @@ export class DocumentArticleEntity {
   @JoinColumn({ name: 'company_id' })
   company?: Relation<CompanyEntity>;
 
-  @ManyToOne(() => DocumentEntity, { nullable: true })
+  @ManyToOne(() => DocumentEntity, {
+    nullable: true,
+    orphanedRowAction: 'soft-delete',
+  })
   @JoinColumn({ referencedColumnName: 'id', name: 'document_id' })
   document?: Relation<DocumentEntity>;
 
