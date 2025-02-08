@@ -6,37 +6,57 @@ import {
   Patch,
   Param,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { CreateRoleDto } from './dtos/create-role.dto';
 import { UpdateRoleDto } from './dtos/update-role.dto';
+import { User } from 'src/authentication/decorators/user.decrator';
 
 @Controller('roles')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @Post()
-  create(@Body() createRoleDto: CreateRoleDto) {
-    return this.roleService.create(createRoleDto);
+  create(@User() user, @Body() dto: CreateRoleDto) {
+    return this.roleService.create({
+      ...dto,
+      createdBy: user,
+    });
   }
 
   @Get()
-  findAll() {
-    return this.roleService.findAll();
+  findAll(@User('id') userId: string) {
+    return this.roleService.findAll(userId);
   }
 
   @Get(':role')
-  findOne(@Param('role') id: string) {
-    return this.roleService.findOne(id);
+  async findOne(@User('id') userId: string, @Param('role') id: string) {
+    const role = await this.roleService.findOne(userId, id);
+
+    if (!role) {
+      throw new NotFoundException('Role not found');
+    }
+
+    return role;
   }
 
   @Patch(':role')
-  update(@Param('role') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.roleService.update(id, updateRoleDto);
+  async update(
+    @User('id') userId: string,
+    @Param('role') id: string,
+    @Body() dto: UpdateRoleDto,
+  ) {
+    await this.findOne(userId, id);
+    return this.roleService.update(id, dto);
   }
 
   @Delete(':role')
-  remove(@Param('role') id: string) {
-    return this.roleService.remove(id);
+  async remove(@User('id') userId: string, @Param('role') id: string) {
+    const { affected } = await this.roleService.remove(userId, id);
+
+    if (!affected) {
+      throw new NotFoundException('Role not found');
+    }
   }
 }

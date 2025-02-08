@@ -7,24 +7,26 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'roles' })
-export class Role {
+@Unique(['name'])
+export class RoleEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   slug: string;
 
   @Column({ type: 'text', nullable: true })
   description?: string;
 
-  @ManyToOne(() => UserEntity, { nullable: true })
+  @ManyToOne(() => UserEntity, { eager: true, nullable: true })
   @JoinColumn({ name: 'created_by' })
   createdBy?: Relation<UserEntity>;
 

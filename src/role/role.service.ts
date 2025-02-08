@@ -1,34 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRoleDto } from './dtos/create-role.dto';
 import { UpdateRoleDto } from './dtos/update-role.dto';
-import { Role } from './entities/role.entity';
+import { RoleEntity } from './entities/role.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class RoleService {
   constructor(
-    @InjectRepository(Role)
-    public readonly roleRepository: Repository<Role>,
+    @InjectRepository(RoleEntity)
+    public readonly repository: Repository<RoleEntity>,
   ) {}
 
   create(dto: CreateRoleDto) {
-    return this.roleRepository.save(dto);
+    return this.repository.save(dto);
   }
 
-  findAll() {
-    return this.roleRepository.find();
+  findAll(userId: string) {
+    return this.repository.findBy({ createdBy: { id: userId } });
   }
 
-  findOne(id: string) {
-    return this.roleRepository.findOne({ where: { id } });
+  findOne(userId: string, id: string) {
+    return this.repository.findOneBy({ id, createdBy: { id: userId } });
   }
 
   update(id: string, dto: UpdateRoleDto) {
-    return this.roleRepository.update(id, dto);
+    return this.repository.manager.transaction(async (manager) => {
+      await manager.save(RoleEntity, { id, ...dto });
+      return manager.findOneBy(RoleEntity, { id });
+    });
   }
 
-  remove(id: string) {
-    return this.roleRepository.delete(id);
+  remove(userId: string, id: string) {
+    return this.repository.delete({ id, createdBy: { id: userId } });
   }
 }
