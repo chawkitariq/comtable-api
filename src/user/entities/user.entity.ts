@@ -26,7 +26,7 @@ export class UserEntity {
   @Column()
   password: string;
 
-  @ManyToOne(() => RoleEntity)
+  @ManyToOne(() => RoleEntity, { eager: true })
   @JoinColumn({ name: 'role_id' })
   role?: Relation<RoleEntity>;
 

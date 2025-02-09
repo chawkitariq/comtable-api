@@ -38,7 +38,7 @@ export class RoleEntity {
   @OneToMany(() => UserEntity, (user) => user.role)
   users?: Relation<UserEntity[]>;
 
-  @ManyToOne(() => UserEntity, { eager: true, nullable: true })
+  @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })
   createdBy?: Relation<UserEntity>;
 

@@ -12,12 +12,14 @@ import { CreateCompanyDto } from './dtos/create-company.dto';
 import { UpdateCompanyDto } from './dtos/update-company.dto';
 import { User } from 'src/authentication/decorators/user.decrator';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { Permissions } from 'src/authorization/decorators/permissions.decorator';
 
 @Controller('companies')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Post()
+  @Permissions('companies', ['create'])
   create(@User() user: UserEntity, @Body() createCompanyDto: CreateCompanyDto) {
     return this.companyService.create({
       ...createCompanyDto,
@@ -26,16 +28,19 @@ export class CompanyController {
   }
 
   @Get()
+  @Permissions('companies', ['read'])
   findAll(@User('id') userId: string) {
     return this.companyService.findAllByUser(userId);
   }
 
   @Get(':company')
+  @Permissions('companies', ['read'])
   findOne(@Param('company') id: string) {
     return this.companyService.findOne(id);
   }
 
   @Patch(':company')
+  @Permissions('companies', ['create', 'update'], 'oneof')
   update(
     @User('id') userId: string,
     @Param('company') companyId: string,
