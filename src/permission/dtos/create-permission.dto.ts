@@ -1,6 +1,11 @@
-import { IsDefined, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDefined,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { RoleEntity } from 'src/role/entities/role.entity';
-import { PermissionActionEnum } from '../permission.type';
 
 export class CreatePermissionDto {
   @IsDefined()
@@ -8,10 +13,21 @@ export class CreatePermissionDto {
   @IsNotEmpty()
   subject: string;
 
-  @IsDefined()
-  @IsNotEmpty()
-  @IsEnum(PermissionActionEnum)
-  action: PermissionActionEnum;
+  @IsOptional()
+  @IsBoolean()
+  create: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  read: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  update: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  delete: boolean;
 
   role: RoleEntity;
 }

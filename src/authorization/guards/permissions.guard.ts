@@ -5,7 +5,6 @@ import {
   Permissions,
 } from '../decorators/permissions.decorator';
 import { UserEntity } from 'src/user/entities/user.entity';
-import { PermissionActionEnum } from 'src/permission/permission.type';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
@@ -32,18 +31,14 @@ export class PermissionsGuard implements CanActivate {
 
     const { user } = context.switchToHttp().getRequest<{ user: UserEntity }>();
 
-    const permissionsActions = user.role.permissions
-      ?.filter((permission) => permission.subject === subject)
-      .map(({ action }) => action);
+    const permission = user.role.permissions?.find(
+      (permission) => permission.subject === subject,
+    );
 
     if (operation === 'every') {
-      return actions.every((action) =>
-        permissionsActions.includes(action as PermissionActionEnum),
-      );
+      return actions.every((action) => permission[action]);
     }
 
-    return actions.some((action) =>
-      permissionsActions.includes(action as PermissionActionEnum),
-    );
+    return actions.some((action) => permission[action]);
   }
 }

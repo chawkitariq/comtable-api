@@ -10,10 +10,9 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { PermissionActionEnum } from '../permission.type';
 
 @Entity({ name: 'permissions' })
-@Unique(['subject', 'action'])
+@Unique(['subject'])
 export class PermissionEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -21,11 +20,17 @@ export class PermissionEntity {
   @Column()
   subject: string;
 
-  @Column({
-    type: 'enum',
-    enum: PermissionActionEnum,
-  })
-  action: PermissionActionEnum;
+  @Column({ type: 'boolean', default: false })
+  create: boolean;
+
+  @Column({ type: 'boolean', default: false })
+  read: boolean;
+
+  @Column({ type: 'boolean', default: false })
+  update: boolean;
+
+  @Column({ type: 'boolean', default: false })
+  delete: boolean;
 
   @ManyToOne(() => RoleEntity, {
     orphanedRowAction: 'delete',
