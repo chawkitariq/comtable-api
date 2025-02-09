@@ -1,24 +1,37 @@
+import { RoleEntity } from 'src/role/entities/role.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
+  Relation,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { PermissionActionEnum } from '../permission.type';
 
 @Entity({ name: 'permissions' })
-export class Permission {
+@Unique(['subject', 'action'])
+export class PermissionEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  name: string;
+  subject: string;
 
-  @Column()
-  slug: string;
+  @Column({
+    type: 'enum',
+    enum: PermissionActionEnum,
+  })
+  action: PermissionActionEnum;
 
-  @Column({ type: 'text', nullable: true })
-  description?: string;
+  @ManyToOne(() => RoleEntity, {
+    orphanedRowAction: 'delete',
+  })
+  @JoinColumn({ name: 'role_id' })
+  role?: Relation<RoleEntity>;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

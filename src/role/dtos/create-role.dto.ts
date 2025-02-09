@@ -1,4 +1,13 @@
-import { IsDefined, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsDefined,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { CreatePermissionDto } from 'src/permission/dtos/create-permission.dto';
 import { UserEntity } from 'src/user/entities/user.entity';
 
 export class CreateRoleDto {
@@ -10,6 +19,12 @@ export class CreateRoleDto {
   @IsOptional()
   @IsString()
   description: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreatePermissionDto)
+  permissions?: CreatePermissionDto[];
 
   createdBy: UserEntity;
 }

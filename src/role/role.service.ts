@@ -16,11 +16,11 @@ export class RoleService {
     return this.repository.save(dto);
   }
 
-  findAll(userId: string) {
+  findAllByUser(userId: string) {
     return this.repository.findBy({ createdBy: { id: userId } });
   }
 
-  findOne(userId: string, id: string) {
+  findOneByUser(userId: string, id: string) {
     return this.repository.findOneBy({ id, createdBy: { id: userId } });
   }
 
@@ -31,7 +31,11 @@ export class RoleService {
     });
   }
 
-  remove(userId: string, id: string) {
-    return this.repository.delete({ id, createdBy: { id: userId } });
+  remove(id: string) {
+    return this.repository.delete({ id });
+  }
+
+  isExistsByUserAndName(userId: string, name: string) {
+    return this.repository.existsBy({ name, createdBy: { id: userId } });
   }
 }

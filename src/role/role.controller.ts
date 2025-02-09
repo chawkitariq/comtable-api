@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   NotFoundException,
+  ConflictException,
 } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { CreateRoleDto } from './dtos/create-role.dto';
@@ -18,7 +19,16 @@ export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @Post()
-  create(@User() user, @Body() dto: CreateRoleDto) {
+  async create(@User() user, @Body() dto: CreateRoleDto) {
+    const isExists = await this.roleService.isExistsByUserAndName(
+      user.id,
+      dto.name,
+    );
+
+    if (isExists) {
+      throw new ConflictException('Role already exists');
+    }
+
     return this.roleService.create({
       ...dto,
       createdBy: user,
@@ -27,12 +37,12 @@ export class RoleController {
 
   @Get()
   findAll(@User('id') userId: string) {
-    return this.roleService.findAll(userId);
+    return this.roleService.findAllByUser(userId);
   }
 
   @Get(':role')
   async findOne(@User('id') userId: string, @Param('role') id: string) {
-    const role = await this.roleService.findOne(userId, id);
+    const role = await this.roleService.findOneByUser(userId, id);
 
     if (!role) {
       throw new NotFoundException('Role not found');
@@ -53,10 +63,7 @@ export class RoleController {
 
   @Delete(':role')
   async remove(@User('id') userId: string, @Param('role') id: string) {
-    const { affected } = await this.roleService.remove(userId, id);
-
-    if (!affected) {
-      throw new NotFoundException('Role not found');
-    }
+    await this.findOne(userId, id);
+    await this.roleService.remove(id);
   }
 }

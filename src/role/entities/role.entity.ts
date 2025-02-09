@@ -1,3 +1,4 @@
+import { PermissionEntity } from 'src/permission/entities/permission.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -5,6 +6,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Relation,
   Unique,
@@ -25,6 +27,16 @@ export class RoleEntity {
 
   @Column({ type: 'text', nullable: true })
   description?: string;
+
+  @OneToMany(() => PermissionEntity, (permission) => permission.role, {
+    eager: true,
+    cascade: true,
+    orphanedRowAction: 'delete',
+  })
+  permissions?: Relation<PermissionEntity[]>;
+
+  @OneToMany(() => UserEntity, (user) => user.role)
+  users?: Relation<UserEntity[]>;
 
   @ManyToOne(() => UserEntity, { eager: true, nullable: true })
   @JoinColumn({ name: 'created_by' })

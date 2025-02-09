@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePermissionDto } from './dtos/create-permission.dto';
 import { UpdatePermissionDto } from './dtos/update-permission.dto';
-import { Permission } from './entities/permission.entity';
+import { PermissionEntity } from './entities/permission.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PermissionService {
   constructor(
-    @InjectRepository(Permission)
-    public readonly permissionRepository: Repository<Permission>,
+    @InjectRepository(PermissionEntity)
+    public readonly permissionRepository: Repository<PermissionEntity>,
   ) {}
 
   create(dto: CreatePermissionDto) {

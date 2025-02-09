@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { RoleEntity } from 'src/role/entities/role.entity';
 import {
   Column,
   CreateDateColumn,
@@ -8,10 +9,12 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'users' })
+@Unique(['email'])
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -22,6 +25,10 @@ export class UserEntity {
   @Exclude()
   @Column()
   password: string;
+
+  @ManyToOne(() => RoleEntity)
+  @JoinColumn({ name: 'role_id' })
+  role?: Relation<RoleEntity>;
 
   @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })
