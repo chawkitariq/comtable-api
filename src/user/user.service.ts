@@ -20,12 +20,20 @@ export class UserService {
     return this.repository.find();
   }
 
+  findAllByCreatedBy(createdBy: string) {
+    return this.repository.findBy({ createdBy: { id: createdBy } });
+  }
+
   findOne(id: string) {
     return this.repository.findOne({ where: { id } });
   }
 
   findOneByEmail(email: string) {
     return this.repository.findOne({ where: { email } });
+  }
+
+  findOneByCreatedBy(createdBy: string, id: string) {
+    return this.repository.findOneBy({ id, createdBy: { id: createdBy } });
   }
 
   isExistsByEmail(email: string) {

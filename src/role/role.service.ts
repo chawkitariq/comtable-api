@@ -16,8 +16,16 @@ export class RoleService {
     return this.repository.save(dto);
   }
 
+  findAll() {
+    return this.repository.find();
+  }
+
   findAllByUser(userId: string) {
     return this.repository.findBy({ createdBy: { id: userId } });
+  }
+
+  findOne(id: string) {
+    return this.repository.findOneBy({ id });
   }
 
   findOneByUser(userId: string, id: string) {
