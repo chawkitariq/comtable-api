@@ -31,7 +31,6 @@ export class RoleEntity {
   @OneToMany(() => PermissionEntity, (permission) => permission.role, {
     eager: true,
     cascade: true,
-    orphanedRowAction: 'delete',
   })
   permissions?: Relation<PermissionEntity[]>;
 

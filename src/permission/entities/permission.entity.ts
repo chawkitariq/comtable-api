@@ -23,7 +23,7 @@ export class PermissionEntity {
   name: string;
 
   @ManyToOne(() => RoleEntity, {
-    orphanedRowAction: 'delete',
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'role_id' })
   role?: Relation<RoleEntity>;

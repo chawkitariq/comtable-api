@@ -13,12 +13,14 @@ import { RoleService } from './role.service';
 import { CreateRoleDto } from './dtos/create-role.dto';
 import { UpdateRoleDto } from './dtos/update-role.dto';
 import { User } from 'src/authentication/decorators/user.decrator';
+import { Permissions } from 'src/authorization/decorators/permissions.decorator';
 
 @Controller('roles')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @Post()
+  @Permissions('create:roles')
   async create(@User() user, @Body() dto: CreateRoleDto) {
     const isExists = await this.roleService.isExistsByUserAndName(
       user.id,
@@ -36,11 +38,13 @@ export class RoleController {
   }
 
   @Get()
+  @Permissions('read:roles')
   findAll(@User('id') userId: string) {
     return this.roleService.findAllByUser(userId);
   }
 
   @Get(':role')
+  @Permissions('read:roles')
   async findOne(@User('id') userId: string, @Param('role') id: string) {
     const role = await this.roleService.findOneByUser(userId, id);
 
@@ -52,6 +56,7 @@ export class RoleController {
   }
 
   @Patch(':role')
+  @Permissions('update:roles')
   async update(
     @User('id') userId: string,
     @Param('role') id: string,
@@ -62,6 +67,7 @@ export class RoleController {
   }
 
   @Delete(':role')
+  @Permissions('delete:roles')
   async remove(@User('id') userId: string, @Param('role') id: string) {
     await this.findOne(userId, id);
     await this.roleService.remove(id);
