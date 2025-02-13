@@ -22,7 +22,7 @@ export class DocumentEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'document_number', nullable: true })
+  @Column({ name: 'number', nullable: true })
   number: string;
 
   @Column({ name: 'order_number', nullable: true })

@@ -1,5 +1,4 @@
 import { ArticleEntity } from 'src/article/entities/article.entity';
-import { CompanyEntity } from 'src/company/entities/company.entity';
 import { DocumentEntity } from 'src/document/entities/document.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import {
@@ -52,19 +51,12 @@ export class DocumentArticleEntity {
   @Column({ name: 'discount_rate', type: 'integer', default: 0 })
   discountRate: string;
 
-  @Column({ type: 'integer', default: 0 })
-  total: string;
-
   @OneToMany(
     () => DocumentArticleTaxEntity,
     (documentArticleTaxEntity) => documentArticleTaxEntity.documentArticle,
     { eager: true, cascade: true, orphanedRowAction: 'soft-delete' },
   )
   documentArticleTaxes?: Relation<DocumentArticleTaxEntity[]>;
-
-  @ManyToOne(() => CompanyEntity, { nullable: true })
-  @JoinColumn({ name: 'company_id' })
-  company?: Relation<CompanyEntity>;
 
   @ManyToOne(() => DocumentEntity, {
     nullable: true,

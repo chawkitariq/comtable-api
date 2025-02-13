@@ -1,6 +1,4 @@
-import { CompanyEntity } from 'src/company/entities/company.entity';
 import { DocumentArticleEntity } from 'src/document-article/entities/document-article.entity';
-import { DocumentEntity } from 'src/document/entities/document.entity';
 import { TaxEntity } from 'src/tax/entities/tax.entity';
 import { TaxTypeEnum } from 'src/tax/tax.type';
 import { UserEntity } from 'src/user/entities/user.entity';
@@ -29,14 +27,6 @@ export class DocumentArticleTaxEntity {
 
   @Column({ type: 'integer', default: 0 })
   amount: number;
-
-  @ManyToOne(() => CompanyEntity, { nullable: true })
-  @JoinColumn({ name: 'company_id' })
-  company?: Relation<CompanyEntity>;
-
-  @ManyToOne(() => DocumentEntity, { nullable: true })
-  @JoinColumn({ name: 'document_id' })
-  document?: Relation<DocumentEntity>;
 
   @ManyToOne(() => DocumentArticleEntity, {
     nullable: true,
