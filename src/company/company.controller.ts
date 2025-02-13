@@ -19,7 +19,7 @@ export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Post()
-  @Permissions('companies', ['create'])
+  @Permissions('create:companies')
   create(@User() user: UserEntity, @Body() createCompanyDto: CreateCompanyDto) {
     return this.companyService.create({
       ...createCompanyDto,
@@ -28,19 +28,19 @@ export class CompanyController {
   }
 
   @Get()
-  @Permissions('companies', ['read'])
+  @Permissions('read:companies')
   findAll(@User('id') userId: string) {
     return this.companyService.findAllByUser(userId);
   }
 
   @Get(':company')
-  @Permissions('companies', ['read'])
+  @Permissions('read:companies')
   findOne(@Param('company') id: string) {
     return this.companyService.findOne(id);
   }
 
   @Patch(':company')
-  @Permissions('companies', ['create', 'update'], 'oneof')
+  @Permissions('update:companies')
   update(
     @User('id') userId: string,
     @Param('company') companyId: string,
@@ -54,6 +54,7 @@ export class CompanyController {
   }
 
   @Delete(':company')
+  @Permissions('delete:companies')
   remove(@User('id') userId: string, @Param('company') id: string) {
     return this.companyService.removeByUser(id, userId);
   }

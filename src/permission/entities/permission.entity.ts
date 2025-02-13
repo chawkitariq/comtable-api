@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -12,25 +13,14 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'permissions' })
-@Unique(['subject', 'role'])
+@Unique(['name', 'role'])
 export class PermissionEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Index()
   @Column()
-  subject: string;
-
-  @Column({ type: 'boolean', default: false })
-  create: boolean;
-
-  @Column({ type: 'boolean', default: false })
-  read: boolean;
-
-  @Column({ type: 'boolean', default: false })
-  update: boolean;
-
-  @Column({ type: 'boolean', default: false })
-  delete: boolean;
+  name: string;
 
   @ManyToOne(() => RoleEntity, {
     orphanedRowAction: 'delete',

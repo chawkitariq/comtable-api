@@ -11,34 +11,20 @@ export class PermissionsGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const claims = this.reflector.getAllAndOverride<
+    const permissions = this.reflector.getAllAndOverride<
       Parameters<typeof Permissions>
     >(PERMISSIONS_KEY, [context.getHandler(), context.getClass()]);
 
-    if (!claims) {
-      return true;
-    }
-
-    const [subject, actions, operation] = claims;
-
-    if (!subject) {
-      return true;
-    }
-
-    if (!actions?.length) {
+    if (!permissions?.length) {
       return true;
     }
 
     const { user } = context.switchToHttp().getRequest<{ user: UserEntity }>();
 
-    const permission = user.role.permissions?.find(
-      (permission) => permission.subject === subject,
+    const userPermissions = user.role.permissions.map(({ name }) => name);
+
+    return permissions.every((permission) =>
+      userPermissions.includes(permission),
     );
-
-    if (operation === 'every') {
-      return actions.every((action) => permission[action]);
-    }
-
-    return actions.some((action) => permission[action]);
   }
 }
