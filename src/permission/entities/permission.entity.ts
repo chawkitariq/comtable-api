@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'permissions' })
-@Unique(['subject'])
+@Unique(['subject', 'role'])
 export class PermissionEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
