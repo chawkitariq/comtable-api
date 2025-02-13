@@ -20,11 +20,17 @@ export class AuthenticationService {
   async validateUser(email: string, plainPassword: string): Promise<any> {
     const user = await this.userService.findOneByEmail(email);
 
-    if (user && compare(plainPassword, user.password)) {
-      return user;
+    if (!user) {
+      return null;
     }
 
-    return null;
+    const isValidPassword = await compare(plainPassword, user.password);
+
+    if (!isValidPassword) {
+      return null;
+    }
+
+    return user;
   }
 
   async register({

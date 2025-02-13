@@ -22,12 +22,10 @@ export class AuthenticationController {
   @Public()
   @Post('register')
   async register(@Body() dto: AuthenticationRegisterDto) {
-    const isExists = await this.userService.userRepository.existsBy({
-      email: dto.email,
-    });
+    const isExists = await this.userService.isExistsByEmail(dto.email);
 
     if (isExists) {
-      throw new ConflictException('UserEntity already exists');
+      throw new ConflictException('User already exists');
     }
 
     return this.authenticationService.register(dto);

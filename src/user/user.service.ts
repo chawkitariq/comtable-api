@@ -9,30 +9,34 @@ import { UserEntity } from './entities/user.entity';
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    public readonly userRepository: Repository<UserEntity>,
+    public readonly repository: Repository<UserEntity>,
   ) {}
 
   create(dto: CreateUserDto) {
-    return this.userRepository.save(dto);
+    return this.repository.save(dto);
   }
 
   findAll() {
-    return this.userRepository.find();
+    return this.repository.find();
   }
 
   findOne(id: string) {
-    return this.userRepository.findOne({ where: { id } });
+    return this.repository.findOne({ where: { id } });
   }
 
   findOneByEmail(email: string) {
-    return this.userRepository.findOne({ where: { email } });
+    return this.repository.findOne({ where: { email } });
+  }
+
+  isExistsByEmail(email: string) {
+    return this.repository.existsBy({ email });
   }
 
   update(id: string, dto: UpdateUserDto) {
-    return this.userRepository.update(id, dto);
+    return this.repository.update(id, dto);
   }
 
   remove(id: string) {
-    return this.userRepository.softDelete(id);
+    return this.repository.softDelete(id);
   }
 }
