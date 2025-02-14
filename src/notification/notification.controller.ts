@@ -16,8 +16,8 @@ export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
   @Post()
-  create(@Body() createNotificationDto: CreateNotificationDto) {
-    return this.notificationService.create(createNotificationDto);
+  create(@Body() dto: CreateNotificationDto) {
+    return this.notificationService.create(dto);
   }
 
   @Get()
@@ -25,21 +25,21 @@ export class NotificationController {
     return this.notificationService.findAll();
   }
 
-  @Get(':notification')
-  findOne(@Param('notification') id: string) {
-    return this.notificationService.findOne(id);
+  @Get(':notificationId')
+  findOne(@Param('notificationId') notificationId: string) {
+    return this.notificationService.findOne(notificationId);
   }
 
-  @Patch(':notification')
+  @Patch(':notificationId')
   update(
-    @Param('notification') id: string,
-    @Body() updateNotificationDto: UpdateNotificationDto,
+    @Param('notificationId') notificationId: string,
+    @Body() dto: UpdateNotificationDto,
   ) {
-    return this.notificationService.update(id, updateNotificationDto);
+    return this.notificationService.update(notificationId, dto);
   }
 
-  @Delete(':notification')
-  remove(@Param('notification') id: string) {
-    return this.notificationService.remove(id);
+  @Delete(':notificationId')
+  remove(@Param('notificationId') notificationId: string) {
+    return this.notificationService.remove(notificationId);
   }
 }
