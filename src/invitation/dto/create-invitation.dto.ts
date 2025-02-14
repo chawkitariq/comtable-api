@@ -2,10 +2,8 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsEmail,
-  IsInt,
   IsISO8601,
   IsOptional,
-  Min,
   ValidateNested,
 } from 'class-validator';
 import { CreatePermissionDto } from 'src/permission/dtos/create-permission.dto';
@@ -32,7 +30,7 @@ export class CreateInvitationDto {
   @Type(() => CreatePermissionDto)
   permissions?: CreatePermissionDto[];
 
-  user: UserEntity;
+  recipient: UserEntity;
   role?: RoleEntity;
   sender: UserEntity;
 }

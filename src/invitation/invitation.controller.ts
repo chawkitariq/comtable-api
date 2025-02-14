@@ -27,12 +27,12 @@ export class InvitationController {
     @User() sender,
     @Body() { roleId, ...dto }: CreateInvitationDto,
   ) {
-    const user = await this.userService.findOneByEmail(dto.email);
+    const recipient = await this.userService.findOneByEmail(dto.email);
     const role = await this.roleService.findOne(roleId);
 
     return this.invitationService.create({
       ...dto,
-      user,
+      recipient,
       role,
       sender,
     });

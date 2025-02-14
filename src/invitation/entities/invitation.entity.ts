@@ -41,8 +41,8 @@ export class InvitationEntity {
     nullable: true,
     orphanedRowAction: 'soft-delete',
   })
-  @JoinColumn({ name: 'user_id' })
-  user?: Relation<UserEntity>;
+  @JoinColumn({ name: 'recipient_id' })
+  recipient?: Relation<UserEntity>;
 
   @ManyToOne(() => RoleEntity, { nullable: true })
   @JoinColumn({ name: 'role_id' })
