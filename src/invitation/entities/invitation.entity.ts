@@ -38,6 +38,7 @@ export class InvitationEntity {
   expiredAt?: Date;
 
   @OneToOne(() => UserEntity, {
+    eager: true,
     nullable: true,
     orphanedRowAction: 'soft-delete',
   })
@@ -48,7 +49,7 @@ export class InvitationEntity {
   @JoinColumn({ name: 'role_id' })
   role?: Relation<RoleEntity>;
 
-  @ManyToOne(() => UserEntity, { nullable: true })
+  @ManyToOne(() => UserEntity, { eager: true, nullable: true })
   @JoinColumn({ name: 'sender_id' })
   sender?: Relation<UserEntity>;
 

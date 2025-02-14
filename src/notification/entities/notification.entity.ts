@@ -22,8 +22,8 @@ export class Notification {
   @Column({ type: 'text' })
   message: string;
 
-  @Column({ name: 'read_at', type: 'timestamptz', nullable: true })
-  readAt?: Date;
+  @Column({ name: 'read', type: 'boolean', default: false })
+  read: boolean;
 
   @OneToOne(() => UserEntity, {
     nullable: true,

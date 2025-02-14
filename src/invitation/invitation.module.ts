@@ -6,6 +6,8 @@ import { InvitationEntity } from './entities/invitation.entity';
 import { UserModule } from 'src/user/user.module';
 import { RoleModule } from 'src/role/role.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { InvitationCreatedEventListener } from './listeners/invitation-created.listener';
+import { NotificationModule } from 'src/notification/notification.module';
 
 @Module({
   imports: [
@@ -13,8 +15,9 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     EventEmitterModule.forRoot(),
     UserModule,
     RoleModule,
+    NotificationModule,
   ],
   controllers: [InvitationController],
-  providers: [InvitationService],
+  providers: [InvitationService, InvitationCreatedEventListener],
 })
 export class InvitationModule {}

@@ -9,26 +9,26 @@ import { Repository } from 'typeorm';
 export class NotificationService {
   constructor(
     @InjectRepository(Notification)
-    public readonly notificationRepository: Repository<Notification>,
+    public readonly repository: Repository<Notification>,
   ) {}
 
   create(dto: CreateNotificationDto) {
-    return this.notificationRepository.save(dto);
+    return this.repository.save(dto);
   }
 
   findAll() {
-    return this.notificationRepository.find();
+    return this.repository.find();
   }
 
   findOne(id: string) {
-    return this.notificationRepository.findOne({ where: { id } });
+    return this.repository.findOne({ where: { id } });
   }
 
   update(id: string, dto: UpdateNotificationDto) {
-    return this.notificationRepository.update(id, dto);
+    return this.repository.update(id, dto);
   }
 
   remove(id: string) {
-    return this.notificationRepository.delete(id);
+    return this.repository.delete(id);
   }
 }
