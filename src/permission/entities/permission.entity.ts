@@ -1,3 +1,4 @@
+import { InvitationEntity } from 'src/invitation/entities/invitation.entity';
 import { RoleEntity } from 'src/role/entities/role.entity';
 import {
   Column,
@@ -13,7 +14,7 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'permissions' })
-@Unique(['name', 'role'])
+@Unique(['name', 'role', 'invitation'])
 export class PermissionEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -24,9 +25,17 @@ export class PermissionEntity {
 
   @ManyToOne(() => RoleEntity, {
     onDelete: 'CASCADE',
+    nullable: true,
   })
   @JoinColumn({ name: 'role_id' })
   role?: Relation<RoleEntity>;
+
+  @ManyToOne(() => InvitationEntity, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  @JoinColumn({ name: 'invitation_id' })
+  invitation?: Relation<InvitationEntity>;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
