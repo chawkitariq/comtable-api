@@ -9,6 +9,7 @@ import {
 import { CreatePermissionDto } from 'src/permission/dtos/create-permission.dto';
 import { RoleEntity } from 'src/role/entities/role.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { InvitationStatusEnum } from '../invitation.type';
 
 export class CreateInvitationDto {
   @IsOptional()
@@ -30,6 +31,7 @@ export class CreateInvitationDto {
   @Type(() => CreatePermissionDto)
   permissions?: CreatePermissionDto[];
 
+  status?: InvitationStatusEnum;
   recipient: UserEntity;
   role?: RoleEntity;
   sender: UserEntity;

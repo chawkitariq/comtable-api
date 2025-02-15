@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import InvitationCreatedEvent from './events/invitation-created.event';
+import { InvitationStatusEnum } from './invitation.type';
 
 @Injectable()
 export class InvitationService {
@@ -20,7 +21,7 @@ export class InvitationService {
 
     this.eventEmitter.emit(
       InvitationCreatedEvent.name,
-      new InvitationCreatedEvent(invitation.id),
+      new InvitationCreatedEvent(invitation),
     );
 
     return invitation;
@@ -30,15 +31,83 @@ export class InvitationService {
     return this.repository.find();
   }
 
-  findOne(id: string) {
-    return this.repository.findOneBy({ id });
+  findAllBySenderOrRecipient(userId: string) {
+    return this.repository
+      .createQueryBuilder('i')
+      .orWhere('i.sender.id = :id', { id: userId })
+      .orWhere('i.recipient.id = :id', { id: userId })
+      .getMany();
   }
 
-  update(id: string, dto: Omit<UpdateInvitationDto, 'roleId'>) {
-    return this.repository.save({ id, ...dto });
+  findOne(invitationId: string) {
+    return this.repository.findOneBy({ id: invitationId });
   }
 
-  remove(id: string) {
-    return this.repository.delete({ id });
+  isOneExistsByRecipient(invitationId: string, recipientId: string) {
+    return this.repository.existsBy({
+      id: invitationId,
+      recipient: { id: recipientId },
+    });
+  }
+
+  isOneExistsBySender(invitationId: string, senderId: string) {
+    return this.repository.existsBy({
+      id: invitationId,
+      sender: { id: senderId },
+    });
+  }
+
+  isOnePending(invitationId: string) {
+    return this.repository.existsBy({
+      id: invitationId,
+      status: InvitationStatusEnum.Pending,
+    });
+  }
+
+  update(invitationId: string, dto: Omit<UpdateInvitationDto, 'roleId'>) {
+    return this.repository.update(invitationId, dto);
+  }
+
+  updateBySender(
+    invitationId: string,
+    dto: Omit<UpdateInvitationDto, 'roleId'>,
+    senderId?: string,
+  ) {
+    return this.repository.update(
+      { id: invitationId, ...(senderId && { sender: { id: senderId } }) },
+      dto,
+    );
+  }
+
+  cancel(invitationId: string) {
+    return this.repository.save({
+      id: invitationId,
+      status: InvitationStatusEnum.Canceled,
+    });
+  }
+
+  accept(invitationId: string) {
+    return this.repository.save({
+      id: invitationId,
+      status: InvitationStatusEnum.Accepted,
+    });
+  }
+
+  reject(invitationId: string) {
+    return this.repository.save({
+      id: invitationId,
+      status: InvitationStatusEnum.Rejected,
+    });
+  }
+
+  remove(invitationId: string) {
+    return this.repository.delete({ id: invitationId });
+  }
+
+  removeBySender(invitationId: string, senderId?: string) {
+    return this.repository.delete({
+      id: invitationId,
+      ...(senderId && { sender: { id: senderId } }),
+    });
   }
 }

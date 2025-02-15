@@ -26,6 +26,9 @@ export class UserEntity {
   @Column()
   password: string;
 
+  @Column({ name: 'is_admin', type: 'boolean', default: false })
+  isAdmin: Date;
+
   @ManyToOne(() => RoleEntity, { eager: true })
   @JoinColumn({ name: 'role_id' })
   role?: Relation<RoleEntity>;

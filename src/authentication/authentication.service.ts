@@ -46,7 +46,7 @@ export class AuthenticationService {
 
     this.eventEmitter.emit(
       AuthenticationRegisteredEvent.name,
-      new AuthenticationRegisteredEvent(user.id),
+      new AuthenticationRegisteredEvent(user),
     );
 
     return user;
@@ -60,7 +60,7 @@ export class AuthenticationService {
 
     this.eventEmitter.emit(
       AuthenticationLoggedInEvent.name,
-      new AuthenticationLoggedInEvent(user.id),
+      new AuthenticationLoggedInEvent(user),
     );
 
     return {
