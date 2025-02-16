@@ -1,45 +1,48 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Param, Delete, Query } from '@nestjs/common';
 import { NotificationService } from './notification.service';
-import { CreateNotificationDto } from './dtos/create-notification.dto';
-import { UpdateNotificationDto } from './dtos/update-notification.dto';
+import { User } from 'src/authentication/decorators/user.decrator';
+import { ReadNotificationDto } from './dtos/read-notification.dto';
+import { DeleteNotificationDto } from './dtos/delete-notification.dto';
 
 @Controller('notifications')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
-  @Post()
-  create(@Body() dto: CreateNotificationDto) {
-    return this.notificationService.create(dto);
+  @Post('read')
+  readAll(
+    @User('id') receiverId: string,
+    @Query() { ids: notificationIds }: ReadNotificationDto,
+  ) {
+    return this.notificationService.readAllByReceiver(
+      notificationIds,
+      receiverId,
+    );
   }
 
   @Get()
-  findAll() {
-    return this.notificationService.findAll();
+  findAll(@User('id') receiverId: string) {
+    return this.notificationService.findAllByReceiver(receiverId);
   }
 
   @Get(':notificationId')
-  findOne(@Param('notificationId') notificationId: string) {
-    return this.notificationService.findOne(notificationId);
-  }
-
-  @Patch(':notificationId')
-  update(
+  findOne(
+    @User('id') receiverId: string,
     @Param('notificationId') notificationId: string,
-    @Body() dto: UpdateNotificationDto,
   ) {
-    return this.notificationService.update(notificationId, dto);
+    return this.notificationService.findOneByReceiver(
+      notificationId,
+      receiverId,
+    );
   }
 
-  @Delete(':notificationId')
-  remove(@Param('notificationId') notificationId: string) {
-    return this.notificationService.remove(notificationId);
+  @Delete()
+  async removeAll(
+    @User('id') receiverId: string,
+    @Query() { ids: notificationIds }: DeleteNotificationDto,
+  ) {
+    await this.notificationService.removeAllByReceiver(
+      notificationIds,
+      receiverId,
+    );
   }
 }

@@ -14,8 +14,7 @@ export class InvitationCreatedEventListener {
     await this.notificationService.create({
       subject: "Demande D'invitation",
       message: `${sender.email} vous invite`,
-      recipient,
-      sender,
+      receiver: recipient,
     });
   }
 }
