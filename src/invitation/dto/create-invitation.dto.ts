@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsISO8601,
   IsOptional,
+  IsUUID,
   ValidateNested,
 } from 'class-validator';
 import { CreatePermissionDto } from 'src/permission/dtos/create-permission.dto';
@@ -21,9 +22,8 @@ export class CreateInvitationDto {
   expiredAt?: Date;
 
   @IsOptional()
-  // @IsInt()
-  // @Min(0)
-  roleId: string;
+  @IsUUID('4', { always: false })
+  roleId?: string;
 
   @IsOptional()
   @IsArray()

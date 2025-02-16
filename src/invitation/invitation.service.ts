@@ -31,83 +31,79 @@ export class InvitationService {
     return this.repository.find();
   }
 
+  findAllBySender(senderId: string) {
+    return this.repository.findBy({ sender: { id: senderId } });
+  }
+
+  findAllByRecipient(recipientId: string) {
+    return this.repository.findBy({ recipient: { id: recipientId } });
+  }
+
   findAllBySenderOrRecipient(userId: string) {
     return this.repository
       .createQueryBuilder('i')
+      .leftJoinAndSelect('i.role', 'role')
+      .leftJoinAndSelect('i.sender', 'sender')
+      .leftJoinAndSelect('i.recipient', 'recipient')
       .orWhere('i.sender.id = :id', { id: userId })
       .orWhere('i.recipient.id = :id', { id: userId })
       .getMany();
   }
 
-  findOne(invitationId: string) {
+  findOne(invitationId: number) {
     return this.repository.findOneBy({ id: invitationId });
   }
 
-  isOneExistsByRecipient(invitationId: string, recipientId: string) {
+  isOneExistsByRecipient(invitationId: number, recipientId: string) {
     return this.repository.existsBy({
       id: invitationId,
       recipient: { id: recipientId },
     });
   }
 
-  isOneExistsBySender(invitationId: string, senderId: string) {
+  isOneExistsBySender(invitationId: number, senderId: string) {
     return this.repository.existsBy({
       id: invitationId,
       sender: { id: senderId },
     });
   }
 
-  isOnePending(invitationId: string) {
+  isOnePending(invitationId: number) {
     return this.repository.existsBy({
       id: invitationId,
       status: InvitationStatusEnum.Pending,
     });
   }
 
-  update(invitationId: string, dto: Omit<UpdateInvitationDto, 'roleId'>) {
-    return this.repository.update(invitationId, dto);
+  update(invitationId: number, dto: Omit<UpdateInvitationDto, 'roleId'>) {
+    return this.repository.manager.transaction(async (manager) => {
+      await manager.save(InvitationEntity, { id: invitationId, ...dto });
+      return manager.findOneBy(InvitationEntity, { id: invitationId });
+    });
   }
 
-  updateBySender(
-    invitationId: string,
-    dto: Omit<UpdateInvitationDto, 'roleId'>,
-    senderId?: string,
-  ) {
-    return this.repository.update(
-      { id: invitationId, ...(senderId && { sender: { id: senderId } }) },
-      dto,
-    );
-  }
-
-  cancel(invitationId: string) {
+  cancel(invitationId: number) {
     return this.repository.save({
       id: invitationId,
       status: InvitationStatusEnum.Canceled,
     });
   }
 
-  accept(invitationId: string) {
+  accept(invitationId: number) {
     return this.repository.save({
       id: invitationId,
       status: InvitationStatusEnum.Accepted,
     });
   }
 
-  reject(invitationId: string) {
+  reject(invitationId: number) {
     return this.repository.save({
       id: invitationId,
       status: InvitationStatusEnum.Rejected,
     });
   }
 
-  remove(invitationId: string) {
-    return this.repository.delete({ id: invitationId });
-  }
-
-  removeBySender(invitationId: string, senderId?: string) {
-    return this.repository.delete({
-      id: invitationId,
-      ...(senderId && { sender: { id: senderId } }),
-    });
+  remove(invitationId: number) {
+    return this.repository.softDelete({ id: invitationId });
   }
 }

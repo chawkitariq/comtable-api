@@ -16,6 +16,7 @@ import { UserService } from 'src/user/user.service';
 import { RoleService } from 'src/role/role.service';
 import { User } from 'src/authentication/decorators/user.decrator';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { RoleEntity } from 'src/role/entities/role.entity';
 
 @Controller('invitations')
 export class InvitationController {
@@ -41,6 +42,75 @@ export class InvitationController {
     });
   }
 
+  @Post(':invitationId/cancel')
+  async cancel(
+    @User() user: UserEntity,
+    @Param('invitationId') invitationId: number,
+  ) {
+    const isExists = await this.invitationService.isOneExistsBySender(
+      invitationId,
+      user.id,
+    );
+
+    if (!isExists) {
+      throw new NotFoundException('Invitation not found');
+    }
+
+    const isPending = await this.invitationService.isOnePending(invitationId);
+
+    if (!isPending) {
+      throw new BadRequestException('Invitation not pending');
+    }
+
+    return this.invitationService.cancel(invitationId);
+  }
+
+  @Post(':invitationId/accept')
+  async accept(
+    @User() user: UserEntity,
+    @Param('invitationId') invitationId: number,
+  ) {
+    const isExists = await this.invitationService.isOneExistsByRecipient(
+      invitationId,
+      user.id,
+    );
+
+    if (!isExists) {
+      throw new NotFoundException('Invitation not found');
+    }
+
+    const isPending = await this.invitationService.isOnePending(invitationId);
+
+    if (!isPending) {
+      throw new BadRequestException('Invitation not pending');
+    }
+
+    return this.invitationService.accept(invitationId);
+  }
+
+  @Post(':invitationId/reject')
+  async reject(
+    @User() user: UserEntity,
+    @Param('invitationId') invitationId: number,
+  ) {
+    const isExists = await this.invitationService.isOneExistsByRecipient(
+      invitationId,
+      user.id,
+    );
+
+    if (!isExists) {
+      throw new NotFoundException('Invitation not found');
+    }
+
+    const isPending = await this.invitationService.isOnePending(invitationId);
+
+    if (!isPending) {
+      throw new BadRequestException('Invitation not pending');
+    }
+
+    return this.invitationService.reject(invitationId);
+  }
+
   @Get()
   findAll(@User() user: UserEntity) {
     if (!user.isAdmin) {
@@ -50,10 +120,20 @@ export class InvitationController {
     return this.invitationService.findAll();
   }
 
+  @Get('sended')
+  findAllSended(@User('id') senderId: string) {
+    return this.invitationService.findAllBySender(senderId);
+  }
+
+  @Get('received')
+  findAllReceived(@User('id') recipientId: string) {
+    return this.invitationService.findAllByRecipient(recipientId);
+  }
+
   @Get(':invitationId')
   async findOne(
     @User() user: UserEntity,
-    @Param('invitationId') invitationId: string,
+    @Param('invitationId') invitationId: number,
   ) {
     if (!user.isAdmin) {
       const isExistsBySender = await this.invitationService.isOneExistsBySender(
@@ -84,111 +164,45 @@ export class InvitationController {
   @Patch(':invitationId')
   async update(
     @User() sender: UserEntity,
-    @Param('invitationId') invitationId: string,
-    @Body() dto: UpdateInvitationDto,
+    @Param('invitationId') invitationId: number,
+    @Body() { roleId, ...dto }: UpdateInvitationDto,
   ) {
-    const senderId = !sender.isAdmin ? sender.id : undefined;
-
-    const { affected } = await this.invitationService.updateBySender(
+    const isExists = await this.invitationService.isOneExistsBySender(
       invitationId,
-      dto,
-      senderId,
+      sender.id,
     );
 
-    if (!affected) {
+    if (!isExists) {
       throw new NotFoundException('Invitation not found');
     }
-  }
 
-  @Patch(':invitationId/cancel')
-  async cancel(
-    @User() user: UserEntity,
-    @Param('invitationId') invitationId: string,
-  ) {
-    if (!user.isAdmin) {
-      const isExists = await this.invitationService.isOneExistsBySender(
-        invitationId,
-        user.id,
-      );
+    let role: RoleEntity | undefined;
 
-      if (!isExists) {
-        throw new NotFoundException('Invitation not found');
-      }
-
-      const isPending = await this.invitationService.isOnePending(invitationId);
-
-      if (!isPending) {
-        throw new BadRequestException('Invitation not pending');
-      }
+    if (roleId === null) {
+      role = null;
+    } else {
+      role = await this.roleService.findOne(roleId);
     }
 
-    return this.invitationService.cancel(invitationId);
-  }
+    dto.role = role;
 
-  @Patch(':invitationId/accept')
-  async accept(
-    @User() user: UserEntity,
-    @Param('invitationId') invitationId: string,
-  ) {
-    if (!user.isAdmin) {
-      const isExists = await this.invitationService.isOneExistsByRecipient(
-        invitationId,
-        user.id,
-      );
-
-      if (!isExists) {
-        throw new NotFoundException('Invitation not found');
-      }
-
-      const isPending = await this.invitationService.isOnePending(invitationId);
-
-      if (!isPending) {
-        throw new BadRequestException('Invitation not pending');
-      }
-    }
-
-    return this.invitationService.accept(invitationId);
-  }
-
-  @Patch(':invitationId/reject')
-  async reject(
-    @User() user: UserEntity,
-    @Param('invitationId') invitationId: string,
-  ) {
-    if (!user.isAdmin) {
-      const isExists = await this.invitationService.isOneExistsByRecipient(
-        invitationId,
-        user.id,
-      );
-
-      if (!isExists) {
-        throw new NotFoundException('Invitation not found');
-      }
-
-      const isPending = await this.invitationService.isOnePending(invitationId);
-
-      if (!isPending) {
-        throw new BadRequestException('Invitation not pending');
-      }
-    }
-
-    return this.invitationService.reject(invitationId);
+    return this.invitationService.update(invitationId, dto);
   }
 
   @Delete(':invitationId')
   async remove(
     @User() sender: UserEntity,
-    @Param('invitationId') invitationId: string,
+    @Param('invitationId') invitationId: number,
   ) {
-    const senderId = !sender.isAdmin ? sender.id : undefined;
-
-    const { affected } = await this.invitationService.removeBySender(
+    const isExists = await this.invitationService.isOneExistsBySender(
       invitationId,
-      senderId,
+      sender.id,
     );
 
-    if (!affected) {
+    if (!isExists) {
       throw new NotFoundException('Invitation not found');
     }
+
+    await this.invitationService.remove(invitationId);
   }
 }

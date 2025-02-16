@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { PermissionEntity } from 'src/permission/entities/permission.entity';
 import { RoleEntity } from 'src/role/entities/role.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
@@ -19,10 +19,10 @@ import {
 import { InvitationStatusEnum } from '../invitation.type';
 
 @Entity({ name: 'invitations' })
-@Unique(['sender', 'email', 'deletedAt'])
+@Unique(['sender', 'email', 'status', 'deletedAt'])
 export class InvitationEntity {
   @PrimaryGeneratedColumn('increment')
-  id: string;
+  id: number;
 
   @Column({
     type: 'enum',
@@ -45,7 +45,7 @@ export class InvitationEntity {
   @JoinColumn({ name: 'recipient_id' })
   recipient?: Relation<UserEntity>;
 
-  @ManyToOne(() => RoleEntity, { nullable: true })
+  @ManyToOne(() => RoleEntity, { eager: true, nullable: true })
   @JoinColumn({ name: 'role_id' })
   role?: Relation<RoleEntity>;
 
@@ -68,4 +68,9 @@ export class InvitationEntity {
   @Exclude()
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
   deletedAt?: Date;
+
+  @Expose()
+  get isPending() {
+    return this.status === InvitationStatusEnum.Pending;
+  }
 }
