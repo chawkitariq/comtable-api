@@ -70,7 +70,7 @@ export class InvitationController {
     @User() user: UserEntity,
     @Param('invitationId') invitationId: number,
   ) {
-    const isExists = await this.invitationService.isOneExistsByRecipient(
+    const isExists = await this.invitationService.isOneExistsByReceiver(
       invitationId,
       user.id,
     );
@@ -93,7 +93,7 @@ export class InvitationController {
     @User() user: UserEntity,
     @Param('invitationId') invitationId: number,
   ) {
-    const isExists = await this.invitationService.isOneExistsByRecipient(
+    const isExists = await this.invitationService.isOneExistsByReceiver(
       invitationId,
       user.id,
     );
@@ -112,9 +112,9 @@ export class InvitationController {
   }
 
   @Get()
-  findAll(@User() user: UserEntity) {
-    if (!user.isAdmin) {
-      return this.invitationService.findAllBySenderOrRecipient(user.id);
+  findAll(@User() receiver: UserEntity) {
+    if (!receiver.isAdmin) {
+      return this.invitationService.findAllBySenderOrReceiver(receiver.id);
     }
 
     return this.invitationService.findAll();
@@ -126,8 +126,8 @@ export class InvitationController {
   }
 
   @Get('received')
-  findAllReceived(@User('id') recipientId: string) {
-    return this.invitationService.findAllByRecipient(recipientId);
+  findAllReceived(@User('id') receiverId: string) {
+    return this.invitationService.findAllByReceiver(receiverId);
   }
 
   @Get(':invitationId')
@@ -141,13 +141,13 @@ export class InvitationController {
         user.id,
       );
 
-      const isExistsByRecipient =
-        await this.invitationService.isOneExistsByRecipient(
+      const isExistsByReceiver =
+        await this.invitationService.isOneExistsByReceiver(
           invitationId,
           user.id,
         );
 
-      if (!isExistsBySender && !isExistsByRecipient) {
+      if (!isExistsBySender && !isExistsByReceiver) {
         throw new NotFoundException('Invitation not found');
       }
     }

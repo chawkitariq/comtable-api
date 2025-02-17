@@ -35,18 +35,18 @@ export class InvitationService {
     return this.repository.findBy({ sender: { id: senderId } });
   }
 
-  findAllByRecipient(recipientId: string) {
-    return this.repository.findBy({ recipient: { id: recipientId } });
+  findAllByReceiver(receiverId: string) {
+    return this.repository.findBy({ receiver: { id: receiverId } });
   }
 
-  findAllBySenderOrRecipient(userId: string) {
+  findAllBySenderOrReceiver(userId: string) {
     return this.repository
       .createQueryBuilder('i')
       .leftJoinAndSelect('i.role', 'role')
       .leftJoinAndSelect('i.sender', 'sender')
-      .leftJoinAndSelect('i.recipient', 'recipient')
+      .leftJoinAndSelect('i.receiver', 'receiver')
       .orWhere('i.sender.id = :id', { id: userId })
-      .orWhere('i.recipient.id = :id', { id: userId })
+      .orWhere('i.receiver.id = :id', { id: userId })
       .getMany();
   }
 
@@ -54,10 +54,10 @@ export class InvitationService {
     return this.repository.findOneBy({ id: invitationId });
   }
 
-  isOneExistsByRecipient(invitationId: number, recipientId: string) {
+  isOneExistsByReceiver(invitationId: number, receiverId: string) {
     return this.repository.existsBy({
       id: invitationId,
-      recipient: { id: recipientId },
+      receiver: { id: receiverId },
     });
   }
 

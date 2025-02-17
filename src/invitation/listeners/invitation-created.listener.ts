@@ -9,12 +9,12 @@ export class InvitationCreatedEventListener {
 
   @OnEvent(InvitationCreatedEvent.name)
   async handle({ invitation }: InvitationCreatedEvent) {
-    const { sender, recipient } = invitation;
+    const { sender, receiver } = invitation;
 
     await this.notificationService.create({
       subject: "Demande D'invitation",
       message: `${sender.email} vous invite`,
-      receiver: recipient,
+      receiver: receiver,
     });
   }
 }

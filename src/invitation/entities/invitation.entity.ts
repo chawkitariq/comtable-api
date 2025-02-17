@@ -43,7 +43,7 @@ export class InvitationEntity {
     orphanedRowAction: 'soft-delete',
   })
   @JoinColumn({ name: 'recipient_id' })
-  recipient?: Relation<UserEntity>;
+  receiver?: Relation<UserEntity>;
 
   @ManyToOne(() => RoleEntity, { eager: true, nullable: true })
   @JoinColumn({ name: 'role_id' })
