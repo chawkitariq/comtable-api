@@ -12,6 +12,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { CurrencySymbolPositionEnum } from '../currency.type';
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity({ name: 'currencies' })
 export class CurrencyEntity {
@@ -55,6 +56,7 @@ export class CurrencyEntity {
   @JoinColumn({ name: 'created_by' })
   createdBy?: Relation<UserEntity>;
 
+  @Exclude()
   @Column({ name: 'disabled_at', type: 'timestamptz', nullable: true })
   disabledAt?: Date;
 
@@ -64,6 +66,12 @@ export class CurrencyEntity {
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt: Date;
 
+  @Exclude()
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
   deletedAt?: Date;
+
+  @Expose()
+  get isEnabled() {
+    return !(this.disabledAt instanceof Date);
+  }
 }

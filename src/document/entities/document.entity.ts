@@ -22,7 +22,7 @@ export class DocumentEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'number', nullable: true })
+  @Column({ name: 'number' })
   number: string;
 
   @Column({ name: 'order_number', nullable: true })
@@ -41,28 +41,34 @@ export class DocumentEntity {
   })
   status: DocumentStatusEnum;
 
-  @Column({ name: 'issued_at', type: 'timestamptz', nullable: true })
+  @Column({ name: 'issued_at', type: 'timestamptz' })
   issuedAt: Date;
 
-  @Column({ name: 'due_at', type: 'timestamptz', nullable: true })
+  @Column({ name: 'due_at', type: 'timestamptz' })
   dueAt: Date;
 
-  @Column({ name: 'currency_code', nullable: true })
-  currencyCode?: string;
+  @Column({ type: 'decimal', precision: 15, scale: 4 })
+  amount: number;
 
-  @Column({ name: 'currency_rate', type: 'integer', default: 0 })
+  @Column({ name: 'currency_code' })
+  currencyCode: string;
+
+  @Column({ name: 'currency_rate', type: 'decimal', precision: 15, scale: 8 })
   currencyRate: number;
 
-  @Column({ name: 'contact_name', nullable: true })
-  contactName?: string;
+  @Column({ name: 'contact_name' })
+  contactName: string;
 
   @Column({ name: 'contact_email', nullable: true })
   contactEmail?: string;
 
+  @Column({ name: 'contact_tax_number', nullable: true })
+  contactTaxNumber?: string;
+
   @Column({ name: 'contact_phone', nullable: true })
   contactPhone?: string;
 
-  @Column({ name: 'contact_address', type: 'text', nullable: true })
+  @Column({ name: 'contact_address', nullable: true })
   contactAddress?: string;
 
   @Column({ name: 'contact_city', nullable: true })

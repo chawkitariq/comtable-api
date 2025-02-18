@@ -15,6 +15,8 @@ import {
 } from 'typeorm';
 import { ArticleTypeEnum } from 'src/article/article.type';
 import { DocumentArticleTaxEntity } from 'src/document-article-tax/entities/document-article-tax.entity';
+import { CompanyEntity } from 'src/company/entities/company.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'document_articles' })
 export class DocumentArticleEntity {
@@ -36,19 +38,25 @@ export class DocumentArticleEntity {
   @Column({ nullable: true })
   sku?: string;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'decimal', precision: 12, scale: 2 })
   quantity: number;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'decimal', precision: 15, scale: 4 })
   price: number;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'decimal', precision: 15, scale: 4, default: '0.0000' })
   tax: number;
 
   @Column({ name: 'discount_type', default: 'normal' })
   discountType: string;
 
-  @Column({ name: 'discount_rate', type: 'integer', default: 0 })
+  @Column({
+    name: 'discount_rate',
+    type: 'decimal',
+    precision: 15,
+    scale: 4,
+    default: '0.0000',
+  })
   discountRate: string;
 
   @OneToMany(
@@ -65,10 +73,17 @@ export class DocumentArticleEntity {
   @JoinColumn({ referencedColumnName: 'id', name: 'document_id' })
   document?: Relation<DocumentEntity>;
 
+  @Exclude()
   @ManyToOne(() => ArticleEntity, { nullable: true })
   @JoinColumn({ name: 'article_id' })
   article?: Relation<ArticleEntity>;
 
+  @Exclude()
+  @ManyToOne(() => CompanyEntity, { nullable: true })
+  @JoinColumn({ name: 'company_id' })
+  company?: Relation<CompanyEntity>;
+
+  @Exclude()
   @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })
   createdBy?: Relation<UserEntity>;
@@ -79,6 +94,7 @@ export class DocumentArticleEntity {
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt: Date;
 
+  @Exclude()
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
   deletedAt?: Date;
 }

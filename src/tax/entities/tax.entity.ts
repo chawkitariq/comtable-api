@@ -12,6 +12,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { TaxTypeEnum } from '../tax.type';
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity({ name: 'taxes' })
 export class TaxEntity {
@@ -21,7 +22,7 @@ export class TaxEntity {
   @Column()
   name: string;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'decimal', precision: 15, scale: 4 })
   rate: number;
 
   @Column({ type: 'enum', enum: TaxTypeEnum })
@@ -35,12 +36,22 @@ export class TaxEntity {
   @JoinColumn({ name: 'created_by' })
   createdBy?: Relation<UserEntity>;
 
+  @Exclude()
+  @Column({ name: 'disabled_at', type: 'timestamptz', nullable: true })
+  disabledAt?: Date;
+
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt: Date;
 
+  @Exclude()
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
   deletedAt?: Date;
+
+  @Expose()
+  get isEnabled() {
+    return !(this.disabledAt instanceof Date);
+  }
 }

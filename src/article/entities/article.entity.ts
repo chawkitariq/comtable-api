@@ -14,6 +14,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ArticleTypeEnum } from '../article.type';
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity({ name: 'articles' })
 @Unique(['company', 'sku', 'deletedAt'])
@@ -36,10 +37,22 @@ export class ArticleEntity {
   @Column({ type: 'text', nullable: true })
   description?: string;
 
-  @Column({ name: 'sale_price', type: 'integer', default: 0 })
+  @Column({
+    name: 'sale_price',
+    type: 'decimal',
+    precision: 15,
+    scale: 4,
+    nullable: true,
+  })
   salePrice?: number;
 
-  @Column({ name: 'purchase_price', type: 'integer', default: 0 })
+  @Column({
+    name: 'purchase_price',
+    type: 'decimal',
+    precision: 15,
+    scale: 4,
+    nullable: true,
+  })
   purchasePrice?: number;
 
   @ManyToOne(() => CompanyEntity, { nullable: true })
@@ -54,6 +67,7 @@ export class ArticleEntity {
   @JoinColumn({ name: 'created_by' })
   createdBy?: Relation<UserEntity>;
 
+  @Exclude()
   @Column({ name: 'disabled_at', type: 'timestamptz', nullable: true })
   disabledAt?: Date;
 
@@ -63,6 +77,12 @@ export class ArticleEntity {
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt: Date;
 
+  @Exclude()
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
   deletedAt?: Date;
+
+  @Expose()
+  get isEnabled() {
+    return !(this.disabledAt instanceof Date);
+  }
 }

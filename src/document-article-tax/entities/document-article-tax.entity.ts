@@ -1,3 +1,5 @@
+import { Exclude } from 'class-transformer';
+import { CompanyEntity } from 'src/company/entities/company.entity';
 import { DocumentArticleEntity } from 'src/document-article/entities/document-article.entity';
 import { TaxEntity } from 'src/tax/entities/tax.entity';
 import { TaxTypeEnum } from 'src/tax/tax.type';
@@ -25,7 +27,7 @@ export class DocumentArticleTaxEntity {
   @Column({ type: 'enum', enum: TaxTypeEnum })
   type: TaxTypeEnum;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'decimal', precision: 15, scale: 4 })
   amount: number;
 
   @ManyToOne(() => DocumentArticleEntity, {
@@ -35,10 +37,17 @@ export class DocumentArticleTaxEntity {
   @JoinColumn({ referencedColumnName: 'id', name: 'document_article_id' })
   documentArticle?: Relation<DocumentArticleEntity>;
 
+  @Exclude()
   @ManyToOne(() => TaxEntity, { nullable: true })
   @JoinColumn({ name: 'tax_id' })
   tax?: Relation<TaxEntity>;
 
+  @Exclude()
+  @ManyToOne(() => CompanyEntity, { nullable: true })
+  @JoinColumn({ name: 'company_id' })
+  company?: Relation<CompanyEntity>;
+
+  @Exclude()
   @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'created_by' })
   createdBy?: Relation<UserEntity>;
@@ -49,6 +58,7 @@ export class DocumentArticleTaxEntity {
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt: Date;
 
+  @Exclude()
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
   deletedAt?: Date;
 }
