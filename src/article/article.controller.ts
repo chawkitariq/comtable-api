@@ -24,16 +24,16 @@ export class ArticleController {
   @Post('companies/:companyId/articles')
   async create(
     @Param('companyId') companyId: string,
-    @Body() createArticleDto: CreateArticleDto,
+    @Body() dto: CreateArticleDto,
   ) {
     const company = await this.companyService.findOne(companyId);
 
     if (!company) {
-      throw new BadRequestException('Company not exists');
+      throw new BadRequestException('Company does not exists');
     }
 
     return this.articleService.create({
-      ...createArticleDto,
+      ...dto,
       company,
     });
   }
@@ -44,7 +44,7 @@ export class ArticleController {
   }
 
   @Get('/articles/:articleId')
-  async findOne(@Param('article') articleId: string) {
+  async findOne(@Param('articleId') articleId: string) {
     const article = await this.articleService.findOne(articleId);
 
     if (!article) {
@@ -56,27 +56,15 @@ export class ArticleController {
 
   @Patch('/articles/:articleId')
   async update(
-    @Param('article') articleId: string,
-    @Body() updateArticleDto: UpdateArticleDto,
+    @Param('articleId') articleId: string,
+    @Body() dto: UpdateArticleDto,
   ) {
-    const { affected } = await this.articleService.update(
-      articleId,
-      updateArticleDto,
-    );
-
-    if (!affected) {
-      throw new NotFoundException('Article not found');
-    }
-
-    return this.findOne(articleId);
+    await this.articleService.update(articleId, dto);
+    return this.articleService.findOne(articleId);
   }
 
   @Delete('/articles/:articleId')
-  async remove(@Param('article') articleId: string) {
-    const { affected } = await this.articleService.remove(articleId);
-
-    if (!affected) {
-      throw new NotFoundException('Article not found');
-    }
+  async remove(@Param('articleId') articleId: string) {
+    await this.articleService.remove(articleId);
   }
 }
