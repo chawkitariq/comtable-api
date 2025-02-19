@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateTaxDto } from './dtos/create-tax.dto';
 import { UpdateTaxDto } from './dtos/update-tax.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { TaxEntity } from './entities/tax.entity';
 
 @Injectable()
@@ -16,11 +16,12 @@ export class TaxService {
     return this.taxRepository.save(dto);
   }
 
-  findAll(companyId: string) {
-    return this.taxRepository.find({
-      where: { company: { id: companyId } },
-      relations: ['company', 'createdBy'],
-    });
+  findAllByCompany(companyId: string) {
+    return this.taxRepository.findBy({ company: { id: companyId } });
+  }
+
+  findAllByIds(taxIds: string[]) {
+    return this.taxRepository.findBy({ id: In(taxIds) });
   }
 
   findOne(id: string) {

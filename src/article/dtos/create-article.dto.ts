@@ -10,6 +10,7 @@ import {
 import { CategoryEntity } from 'src/category/entities/category.entity';
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { ArticleTypeEnum } from '../article.type';
+import { ArticleTaxEntity } from '../entities/article-tax.entity';
 
 export class CreateArticleDto {
   @IsDefined()
@@ -38,4 +39,5 @@ export class CreateArticleDto {
 
   company?: CompanyEntity;
   category?: CategoryEntity;
+  taxes?: ArticleTaxEntity[];
 }

@@ -8,6 +8,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Relation,
   Unique,
@@ -15,6 +16,7 @@ import {
 } from 'typeorm';
 import { ArticleTypeEnum } from '../article.type';
 import { Exclude, Expose } from 'class-transformer';
+import { ArticleTaxEntity } from './article-tax.entity';
 
 @Entity({ name: 'articles' })
 @Unique(['company', 'sku', 'deletedAt'])
@@ -54,6 +56,12 @@ export class ArticleEntity {
     nullable: true,
   })
   purchasePrice?: number;
+
+  @OneToMany(() => ArticleTaxEntity, (articleTax) => articleTax.article, {
+    cascade: true,
+    nullable: true,
+  })
+  taxes?: Relation<ArticleTaxEntity[]>;
 
   @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })
