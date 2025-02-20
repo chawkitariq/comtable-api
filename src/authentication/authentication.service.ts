@@ -15,7 +15,7 @@ export class AuthenticationService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly eventEmitter: EventEmitter2,
-  ) {}
+  ) { }
 
   async validateUser(email: string, plainPassword: string): Promise<any> {
     const user = await this.userService.findOneByEmail(email);
@@ -48,8 +48,6 @@ export class AuthenticationService {
       AuthenticationRegisteredEvent.name,
       new AuthenticationRegisteredEvent(user),
     );
-
-    return user;
   }
 
   async login(user: UserEntity) {
