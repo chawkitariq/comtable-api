@@ -15,7 +15,6 @@ import { UpdateArticleDto } from './dtos/update-article.dto';
 import { CompanyService } from 'src/company/company.service';
 import { CategoryService } from 'src/category/category.service';
 import { TaxService } from 'src/tax/tax.service';
-import { ArticleTaxEntity } from './entities/article-tax.entity';
 
 @Controller()
 export class ArticleController {
@@ -42,14 +41,11 @@ export class ArticleController {
       dto.category = category;
     }
 
-    if (taxIds) {
+    if (Array.isArray(taxIds)) {
       const taxes = await this.taxService.findAllByIds(taxIds);
-      dto.taxes = taxes.map((tax) => {
-        const articleTax = new ArticleTaxEntity();
-        articleTax.company = company;
-        articleTax.tax = tax;
-        return articleTax;
-      });
+      dto.taxes = taxes.map((tax) =>
+        this.articleService.createArticleTax({ tax, company }),
+      );
     }
 
     return this.articleService.create({
@@ -60,7 +56,7 @@ export class ArticleController {
 
   @Get('companies/:companyId/articles')
   async findAll(@Param('companyId') companyId: string) {
-    return this.articleService.findAll(companyId);
+    return this.articleService.findAllByCompany(companyId);
   }
 
   @Get('/articles/:articleId')
@@ -77,8 +73,22 @@ export class ArticleController {
   @Patch('/articles/:articleId')
   async update(
     @Param('articleId') articleId: string,
-    @Body() dto: UpdateArticleDto,
+    @Body() { categoryId, taxIds = [], ...dto }: UpdateArticleDto,
   ) {
+    if (categoryId) {
+      const category = await this.categoryService.findOne(categoryId);
+      dto.category = category;
+    } else if (categoryId === null) {
+      dto.category = null;
+    }
+
+    if (Array.isArray(taxIds)) {
+      const taxes = await this.taxService.findAllByIds(taxIds);
+      dto.taxes = taxes.map((tax) =>
+        this.articleService.createArticleTax({ tax }),
+      );
+    }
+
     await this.articleService.update(articleId, dto);
     return this.articleService.findOne(articleId);
   }

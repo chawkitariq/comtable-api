@@ -14,7 +14,7 @@ import { Exclude } from 'class-transformer';
 import { TaxEntity } from 'src/tax/entities/tax.entity';
 import { ArticleEntity } from './article.entity';
 
-@Entity({ name: 'article_taxes' })
+@Entity({ name: 'articles_taxes' })
 @Unique(['company', 'article', 'tax', 'deletedAt'])
 export class ArticleTaxEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -24,11 +24,11 @@ export class ArticleTaxEntity {
   @JoinColumn({ name: 'company_id' })
   company?: Relation<CompanyEntity>;
 
-  @ManyToOne(() => ArticleEntity)
+  @ManyToOne(() => ArticleEntity, { orphanedRowAction: 'soft-delete' })
   @JoinColumn({ name: 'article_id' })
   article: Relation<ArticleEntity>;
 
-  @ManyToOne(() => TaxEntity)
+  @ManyToOne(() => TaxEntity, { eager: true })
   @JoinColumn({ name: 'tax_id' })
   tax: Relation<TaxEntity>;
 

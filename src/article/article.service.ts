@@ -4,6 +4,9 @@ import { UpdateArticleDto } from './dtos/update-article.dto';
 import { ArticleEntity } from './entities/article.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { TaxEntity } from 'src/tax/entities/tax.entity';
+import { CompanyEntity } from 'src/company/entities/company.entity';
+import { ArticleTaxEntity } from './entities/article-tax.entity';
 
 @Injectable()
 export class ArticleService {
@@ -16,18 +19,12 @@ export class ArticleService {
     return this.repository.save(dto);
   }
 
-  findAll(companyId: string) {
-    return this.repository.find({
-      where: { company: { id: companyId } },
-      relations: ['company'],
-    });
+  findAllByCompany(companyId: string) {
+    return this.repository.findBy({ company: { id: companyId } });
   }
 
   findOneByCompany(id: string, companyId: string) {
-    return this.repository.findOne({
-      where: { id, company: { id: companyId } },
-      relations: ['company'],
-    });
+    return this.repository.findOneBy({ id, company: { id: companyId } });
   }
 
   findOne(id: string) {
@@ -40,5 +37,18 @@ export class ArticleService {
 
   remove(id: string) {
     return this.repository.softDelete(id);
+  }
+
+  createArticleTax({
+    tax,
+    company,
+  }: {
+    tax: TaxEntity;
+    company?: CompanyEntity;
+  }) {
+    const articleTax = new ArticleTaxEntity();
+    articleTax.company = company;
+    articleTax.tax = tax;
+    return articleTax;
   }
 }
