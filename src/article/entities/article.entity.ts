@@ -8,13 +8,15 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Relation,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { ArticleTypeEnum } from '../article.type';
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
+import { ArticleTaxEntity } from './article-tax.entity';
 
 @Entity({ name: 'articles' })
 @Unique(['company', 'sku', 'deletedAt'])
@@ -55,11 +57,19 @@ export class ArticleEntity {
   })
   purchasePrice?: number;
 
+  @Transform(({ value: taxes }) => taxes.map(({ tax }) => tax))
+  @OneToMany(() => ArticleTaxEntity, (articleTax) => articleTax.article, {
+    eager: true,
+    cascade: true,
+    nullable: true,
+  })
+  taxes?: Relation<ArticleTaxEntity[]>;
+
   @ManyToOne(() => CompanyEntity, { nullable: true })
   @JoinColumn({ name: 'company_id' })
   company?: Relation<CompanyEntity>;
 
-  @ManyToOne(() => CategoryEntity, { nullable: true })
+  @ManyToOne(() => CategoryEntity, { eager: true, nullable: true })
   @JoinColumn({ name: 'category_id' })
   category?: Relation<CategoryEntity>;
 

@@ -13,23 +13,39 @@ import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dtos/create-article.dto';
 import { UpdateArticleDto } from './dtos/update-article.dto';
 import { CompanyService } from 'src/company/company.service';
+import { CategoryService } from 'src/category/category.service';
+import { TaxService } from 'src/tax/tax.service';
 
 @Controller()
 export class ArticleController {
   constructor(
     private readonly articleService: ArticleService,
     private readonly companyService: CompanyService,
+    private readonly categoryService: CategoryService,
+    private readonly taxService: TaxService,
   ) {}
 
   @Post('companies/:companyId/articles')
   async create(
     @Param('companyId') companyId: string,
-    @Body() dto: CreateArticleDto,
+    @Body() { categoryId, taxIds = [], ...dto }: CreateArticleDto,
   ) {
     const company = await this.companyService.findOne(companyId);
 
     if (!company) {
       throw new BadRequestException('Company does not exists');
+    }
+
+    if (categoryId) {
+      const category = await this.categoryService.findOne(categoryId);
+      dto.category = category;
+    }
+
+    if (Array.isArray(taxIds)) {
+      const taxes = await this.taxService.findAllByIds(taxIds);
+      dto.taxes = taxes.map((tax) =>
+        this.articleService.createArticleTax({ tax, company }),
+      );
     }
 
     return this.articleService.create({
@@ -40,7 +56,7 @@ export class ArticleController {
 
   @Get('companies/:companyId/articles')
   async findAll(@Param('companyId') companyId: string) {
-    return this.articleService.findAll(companyId);
+    return this.articleService.findAllByCompany(companyId);
   }
 
   @Get('/articles/:articleId')
@@ -57,8 +73,22 @@ export class ArticleController {
   @Patch('/articles/:articleId')
   async update(
     @Param('articleId') articleId: string,
-    @Body() dto: UpdateArticleDto,
+    @Body() { categoryId, taxIds = [], ...dto }: UpdateArticleDto,
   ) {
+    if (categoryId) {
+      const category = await this.categoryService.findOne(categoryId);
+      dto.category = category;
+    } else if (categoryId === null) {
+      dto.category = null;
+    }
+
+    if (Array.isArray(taxIds)) {
+      const taxes = await this.taxService.findAllByIds(taxIds);
+      dto.taxes = taxes.map((tax) =>
+        this.articleService.createArticleTax({ tax }),
+      );
+    }
+
     await this.articleService.update(articleId, dto);
     return this.articleService.findOne(articleId);
   }

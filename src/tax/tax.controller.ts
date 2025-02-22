@@ -36,7 +36,7 @@ export class TaxController {
 
   @Get('/companies/:companyId/taxes')
   findAll(@Param('companyId') companyId: string) {
-    return this.taxService.findAll(companyId);
+    return this.taxService.findAllByCompany(companyId);
   }
 
   @Get('taxes/:tax')
