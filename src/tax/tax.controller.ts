@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { TaxService } from './tax.service';
 import { CreateTaxDto } from './dtos/create-tax.dto';
@@ -21,14 +23,15 @@ export class TaxController {
   ) {}
 
   @Post('/companies/:companyId/taxes')
+  @HttpCode(HttpStatus.CREATED)
   async create(
     @User() user,
     @Param('companyId') companyId: string,
-    @Body() createTaxDto: CreateTaxDto,
+    @Body() dto: CreateTaxDto,
   ) {
     const company = await this.companyService.findOne(companyId);
     return this.taxService.create({
-      ...createTaxDto,
+      ...dto,
       company,
       createdBy: user,
     });
@@ -39,18 +42,20 @@ export class TaxController {
     return this.taxService.findAllByCompany(companyId);
   }
 
-  @Get('taxes/:tax')
+  @Get('taxes/:taxId')
   findOne(@Param('taxId') taxId: string) {
     return this.taxService.findOne(taxId);
   }
 
   @Patch('taxes/:taxId')
-  update(@Param('taxId') taxId: string, @Body() updateTaxDto: UpdateTaxDto) {
-    return this.taxService.update(taxId, updateTaxDto);
+  async update(@Param('taxId') taxId: string, @Body() dto: UpdateTaxDto) {
+    await this.taxService.update(taxId, dto);
+    return this.taxService.findOne(taxId);
   }
 
   @Delete('taxes/:taxId')
-  remove(@Param('taxId') taxId: string) {
-    return this.taxService.remove(taxId);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param('taxId') taxId: string) {
+    await this.taxService.remove(taxId);
   }
 }

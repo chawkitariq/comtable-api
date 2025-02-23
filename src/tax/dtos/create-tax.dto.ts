@@ -1,4 +1,4 @@
-import { IsDefined, IsEnum, IsNumber, IsOptional } from 'class-validator';
+import { IsDecimal, IsDefined, IsEnum, IsOptional } from 'class-validator';
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { TaxTypeEnum } from '../tax.type';
@@ -8,7 +8,7 @@ export class CreateTaxDto {
   name: string;
 
   @IsOptional()
-  @IsNumber()
+  @IsDecimal()
   rate: number;
 
   @IsDefined()

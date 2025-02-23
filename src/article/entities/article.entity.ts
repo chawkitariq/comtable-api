@@ -65,11 +65,18 @@ export class ArticleEntity {
   })
   taxes?: Relation<ArticleTaxEntity[]>;
 
-  @ManyToOne(() => CompanyEntity, { nullable: true })
+  @ManyToOne(() => CompanyEntity, {
+    nullable: true,
+    orphanedRowAction: 'soft-delete',
+  })
   @JoinColumn({ name: 'company_id' })
   company?: Relation<CompanyEntity>;
 
-  @ManyToOne(() => CategoryEntity, { eager: true, nullable: true })
+  @ManyToOne(() => CategoryEntity, {
+    eager: true,
+    nullable: true,
+    orphanedRowAction: 'nullify',
+  })
   @JoinColumn({ name: 'category_id' })
   category?: Relation<CategoryEntity>;
 

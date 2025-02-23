@@ -9,12 +9,14 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { TaxTypeEnum } from '../tax.type';
 import { Exclude, Expose } from 'class-transformer';
 
 @Entity({ name: 'taxes' })
+@Unique(['name', 'deletedAt'])
 export class TaxEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

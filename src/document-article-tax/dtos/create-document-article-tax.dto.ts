@@ -16,7 +16,7 @@ export class CreateDocumentArticleTaxDto {
   type: TaxTypeEnum;
 
   @IsOptional()
-  amount: number;
+  rate: number;
 
   company?: CompanyEntity;
   document?: DocumentEntity;

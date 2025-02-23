@@ -9,30 +9,30 @@ import { TaxEntity } from './entities/tax.entity';
 export class TaxService {
   constructor(
     @InjectRepository(TaxEntity)
-    public readonly taxRepository: Repository<TaxEntity>,
+    public readonly repository: Repository<TaxEntity>,
   ) {}
 
   create(dto: CreateTaxDto) {
-    return this.taxRepository.save(dto);
+    return this.repository.save(dto);
   }
 
   findAllByCompany(companyId: string) {
-    return this.taxRepository.findBy({ company: { id: companyId } });
+    return this.repository.findBy({ company: { id: companyId } });
   }
 
   findAllByIds(taxIds: string[]) {
-    return this.taxRepository.findBy({ id: In(taxIds) });
+    return this.repository.findBy({ id: In(taxIds) });
   }
 
   findOne(id: string) {
-    return this.taxRepository.findOne({ where: { id } });
+    return this.repository.findOneBy({ id });
   }
 
   update(id: string, dto: UpdateTaxDto) {
-    return this.taxRepository.update(id, dto);
+    return this.repository.update(id, dto);
   }
 
   remove(id: string) {
-    return this.taxRepository.softDelete(id);
+    return this.repository.softDelete(id);
   }
 }

@@ -9,11 +9,13 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { CategoryTypeEnum } from '../category.type';
 
 @Entity({ name: 'categories' })
+@Unique(['name', 'deletedAt'])
 export class CategoryEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

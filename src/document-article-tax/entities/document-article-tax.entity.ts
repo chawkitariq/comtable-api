@@ -13,10 +13,12 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'document_article_taxes' })
+@Unique(['name', 'deletedAt'])
 export class DocumentArticleTaxEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -28,14 +30,13 @@ export class DocumentArticleTaxEntity {
   type: TaxTypeEnum;
 
   @Column({ type: 'decimal', precision: 15, scale: 4 })
-  amount: number;
+  rate: number;
 
   @ManyToOne(() => DocumentArticleEntity, {
-    nullable: true,
     orphanedRowAction: 'soft-delete',
   })
-  @JoinColumn({ referencedColumnName: 'id', name: 'document_article_id' })
-  documentArticle?: Relation<DocumentArticleEntity>;
+  @JoinColumn({ name: 'document_article_id' })
+  documentArticle: Relation<DocumentArticleEntity>;
 
   @Exclude()
   @ManyToOne(() => TaxEntity, { nullable: true })

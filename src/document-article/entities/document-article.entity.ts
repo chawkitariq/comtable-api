@@ -11,6 +11,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   Relation,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { ArticleTypeEnum } from 'src/article/article.type';
@@ -19,6 +20,7 @@ import { CompanyEntity } from 'src/company/entities/company.entity';
 import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'document_articles' })
+@Unique(['name', 'deletedAt'])
 export class DocumentArticleEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
