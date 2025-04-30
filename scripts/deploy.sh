@@ -8,8 +8,8 @@ echo "$GITHUB_TOKEN" | docker login $REGISTRY -u "$GITHUB_ACTOR" --password-stdi
 docker pull $FULL_IMAGE_NAME
 
 # Stop and remove the old container if it exists
-docker stop comtable-api-container || true
-docker rm comtable-api-container || true
+# docker stop comtable-api-container || true
+# docker rm comtable-api-container || true
 
 # Run the new container
 docker run -d --name comtable-api-container \
