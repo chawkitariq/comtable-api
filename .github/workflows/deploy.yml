@@ -1,0 +1,47 @@
+name: Deploy to EC2 using AWS Session Manager
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Session Manager Plugin
+    #   curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
+    #   sudo dpkg -i session-manager-plugin.deb
+        run: |
+          aws --version
+          session-manager-plugin --version
+
+    #   - name: Deploy to EC2 using Session Manager
+    #     env:
+    #       EC2_INSTANCE_ID: ${{ secrets.EC2_INSTANCE_ID }}
+    #       IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #       GITHUB_ACTOR: ${{ github.actor }}
+    #     run: |
+    #       # Upload the deploy.sh script to the EC2 instance
+    #       aws ssm send-command \
+    #           --instance-ids $EC2_INSTANCE_ID \
+    #           --document-name "AWS-RunShellScript" \
+    #           --parameters 'commands=["chmod +x ./scripts/deploy.sh", "./scripts/deploy.sh"]'
