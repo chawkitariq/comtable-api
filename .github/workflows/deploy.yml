@@ -59,15 +59,10 @@ jobs:
             subject-digest: ${{ steps.push.outputs.digest }}
             push-to-registry: true
 
-      - name: Install Session Manager Plugin
-        run: |
-          aws --version
-          session-manager-plugin --version
-
       - name: Deploy to EC2 using Session Manager
         env:
           EC2_INSTANCE_ID: ${{ secrets.EC2_INSTANCE_ID }}
-          IMAGE_NAME: ghcr.io/${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          IMAGE_NAME: ghcr.io/${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
         run: |
