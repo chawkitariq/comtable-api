@@ -11,63 +11,66 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     permissions:
       packages: write
       contents: read
       attestations: write
       id-token: write
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+      
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-
+      
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
+      
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
         with:
-            images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      
       - name: Build and push
         id: push
         uses: docker/build-push-action@v6
         with:
-            context: .
-            file: ./Dockerfile.production
-            push: true
-            tags: ${{ steps.meta.outputs.tags }}
-            labels: ${{ steps.meta.outputs.labels }}
-        
+          context: .
+          file: ./Dockerfile.production
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
         with:
-            subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-            subject-digest: ${{ steps.push.outputs.digest }}
-            push-to-registry: true
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
 
       - name: Deploy to EC2 using Session Manager
         env:
           EC2_INSTANCE_ID: ${{ secrets.EC2_INSTANCE_ID }}
-          IMAGE_NAME: ghcr.io/${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          FULL_IMAGE_NAME: ${{ steps.meta.outputs.tags }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
         run: |
-          # Upload the deploy.sh script to the EC2 instance
-          aws ssm send-command \
-              --instance-ids $EC2_INSTANCE_ID \
-              --document-name "AWS-RunShellScript" \
-              --parameters 'commands=["chmod +x ./scripts/deploy.sh", "./scripts/deploy.sh"]'
+          # Make the deploy script executable
+          chmod +x ./scripts/deploy.sh
+          
+          # Start a session and run the deployment script from the repository
+          aws ssm start-session \
+            --target $EC2_INSTANCE_ID \
+            --document-name AWS-StartInteractiveCommand \
+            --parameters command="export FULL_IMAGE_NAME=\"$FULL_IMAGE_NAME\" GITHUB_TOKEN=\"$GITHUB_TOKEN\" GITHUB_ACTOR=\"$GITHUB_ACTOR\" REGISTRY=\"$REGISTRY\" && /bin/bash -s" \
+            < ./scripts/deploy.sh
