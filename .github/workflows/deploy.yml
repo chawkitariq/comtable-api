@@ -64,6 +64,7 @@ jobs:
           FULL_IMAGE_NAME: ${{ steps.meta.outputs.tags }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
+          REGISTRY: ${{ env.REGISTRY }}
         run: |
           # Make the deploy script executable
           chmod +x ./scripts/deploy.sh
@@ -72,5 +73,5 @@ jobs:
           aws ssm start-session \
             --target $EC2_INSTANCE_ID \
             --document-name AWS-StartInteractiveCommand \
-            --parameters command="export FULL_IMAGE_NAME=\"$FULL_IMAGE_NAME\" GITHUB_TOKEN=\"$GITHUB_TOKEN\" GITHUB_ACTOR=\"$GITHUB_ACTOR\" REGISTRY=\"$REGISTRY\" && /bin/bash -s" \
+            --parameters '{"command":["export FULL_IMAGE_NAME='"'$FULL_IMAGE_NAME'"' GITHUB_TOKEN='"'$GITHUB_TOKEN'"' GITHUB_ACTOR='"'$GITHUB_ACTOR'"' REGISTRY='"'$REGISTRY'"' && /bin/bash -s"]}' \
             < ./scripts/deploy.sh
