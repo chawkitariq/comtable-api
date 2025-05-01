@@ -16,7 +16,9 @@ import { App } from 'src/app.util';
       autoLoadEntities: true,
       entities: [],
       synchronize: !App.env.isProduction,
-      ssl: false
+      ssl: {
+        rejectUnauthorized: false,
+      }
     }),
   ],
 })
