@@ -15,7 +15,7 @@ docker rm comtable-api-container || true
 
 # Run the new container
 docker run -d --env-file ./.env --name comtable-api-container \
-  -p 80:80 \
+  -p 80:3000 \
   --restart unless-stopped \
   $FULL_IMAGE_NAME
   
