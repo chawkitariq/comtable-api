@@ -16,11 +16,11 @@ import { isProduction } from 'src/app.constant';
       autoLoadEntities: true,
       entities: [],
       synchronize: !isProduction,
-      ...(isProduction && {
-        ssl: {
-          rejectUnauthorized: false,
-        },
-      }),
+      ssl: isProduction
+        ? {
+            rejectUnauthorized: true,
+          }
+        : false,
     }),
   ],
 })
