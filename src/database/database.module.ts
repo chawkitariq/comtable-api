@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { isProduction } from 'src/app.constant';
-import { App } from 'src/app.util';
 
 @Module({
   imports: [
@@ -16,7 +15,7 @@ import { App } from 'src/app.util';
       database: process.env.DB_DATABASE,
       autoLoadEntities: true,
       entities: [],
-      synchronize: !App.env.isProduction,
+      synchronize: !isProduction,
       ...(isProduction && {
         ssl: {
           rejectUnauthorized: false,
