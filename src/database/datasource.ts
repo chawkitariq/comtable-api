@@ -1,5 +1,6 @@
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
+import { isProduction } from 'src/app.constant';
 import { DataSource } from 'typeorm';
 
 ConfigModule.forRoot();
@@ -14,6 +15,11 @@ const datasource = new DataSource({
   entities: [join(__dirname, '../**/*.entity.{ts,js}')],
   migrations: [join(__dirname, './migrations/**/*.{ts,js}')],
   synchronize: false,
+  ...(isProduction && {
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  }),
 });
 
 export default datasource;
