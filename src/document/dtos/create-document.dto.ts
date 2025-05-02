@@ -5,6 +5,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsOptional,
+  IsString,
   ValidateNested,
 } from 'class-validator';
 import { CategoryEntity } from 'src/category/entities/category.entity';
@@ -38,12 +39,18 @@ export class CreateDocumentDto {
   @IsOptional()
   dueAt: Date;
 
-  @IsOptional()
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
   currencyCode: string;
 
+  @IsDefined()
+  @IsNotEmpty()
   @IsOptional()
   currencyRate: number;
 
+  @IsDefined()
+  @IsNotEmpty()
   @IsOptional()
   contactName: string;
 
