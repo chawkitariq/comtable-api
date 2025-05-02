@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base image
-FROM node:23-slim
+FROM node:23-slim AS base
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
@@ -15,6 +15,20 @@ COPY . .
 
 # Build the NestJS application
 RUN npm run build
+
+# Use a smaller image for the final build
+FROM node:23-slim AS production
+
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Copy only the necessary files from the build stage
+COPY --from=base /usr/src/app/dist ./dist
+COPY --from=base /usr/src/app/node_modules ./node_modules
+COPY --from=base /usr/src/app/package*.json ./
+
+# Set environment variables
+ENV APP_ENV=production
 
 # Expose the application port
 EXPOSE 3000
