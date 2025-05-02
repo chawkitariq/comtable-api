@@ -16,11 +16,9 @@ import { isProduction } from 'src/app.constant';
       autoLoadEntities: true,
       entities: [],
       synchronize: !isProduction,
-      ssl: isProduction
-        ? {
-            rejectUnauthorized: true,
-          }
-        : false,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     }),
   ],
 })
