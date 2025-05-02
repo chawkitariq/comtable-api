@@ -1,4 +1,12 @@
-import { IsArray, IsEnum, IsOptional, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsDecimal,
+  IsDefined,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  ValidateNested,
+} from 'class-validator';
 import { CategoryEntity } from 'src/category/entities/category.entity';
 import { CompanyEntity } from 'src/company/entities/company.entity';
 import { ContactEntity } from 'src/contact/entities/contact.entity';
@@ -8,6 +16,11 @@ import { DocumentStatusEnum, DocumentTypeEnum } from '../document.type';
 import { CreateDocumentArticleDto } from 'src/document-article/dtos/create-document-article.dto';
 
 export class CreateDocumentDto {
+  @IsDefined()
+  @IsNotEmpty()
+  @IsDecimal()
+  amount: number;
+
   @IsOptional()
   number: string;
 
