@@ -46,12 +46,10 @@ export class CreateDocumentDto {
 
   @IsDefined()
   @IsNotEmpty()
-  @IsOptional()
   currencyRate: number;
 
   @IsDefined()
   @IsNotEmpty()
-  @IsOptional()
   contactName: string;
 
   @IsOptional()
