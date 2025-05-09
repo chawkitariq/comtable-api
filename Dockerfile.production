@@ -1,41 +1,24 @@
-# Use the official Node.js image as the base image
-FROM node:23-slim AS base
+FROM node:23-slim AS build
 
-# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
-
-# Install the application dependencies
-RUN npm install
-
-# Copy the rest of the application files
 COPY . .
 
-# Build the NestJS application
+RUN npm install
+
 RUN npm run build
 
-# Use a smaller image for the final build
-FROM node:23-slim AS production
+FROM node:23-slim
 
-# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy only the necessary files from the build stage
-COPY --from=base /usr/src/app/dist ./dist
-COPY --from=base /usr/src/app/node_modules ./node_modules
-COPY --from=base /usr/src/app/package*.json ./
+COPY --from=build /usr/src/app/dist ./dist
+COPY --from=build --chmod=744 /usr/src/app/docker-entrypoint.sh ./docker-entrypoint.sh
 
-# Set environment variables
 ENV APP_ENV=production
 
-# Expose the application port
+ENTRYPOINT [ "./docker-entrypoint.sh" ]
+
 EXPOSE 3000
 
-# Use a non-root user to run the application
-COPY --from=base --chmod=755 /usr/src/app/docker-entrypoint.sh /usr/local/bin/
-ENTRYPOINT [ "docker-entrypoint.sh" ]
-
-# Command to run the application
 CMD ["node", "dist/main"]
