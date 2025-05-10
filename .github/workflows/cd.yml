@@ -69,3 +69,10 @@ jobs:
             --service ${{ secrets.ECS_SERVICE }} \
             --region ${{ secrets.REGION }} \
             --force-new-deployment
+
+      - name: Wait for service stability
+        run: |
+          aws ecs wait services-stable \
+            --cluster ${{ secrets.ECS_CLUSTER }} \
+            --services ${{ secrets.ECS_SERVICE }} \
+            --region ${{ secrets.REGION }}
