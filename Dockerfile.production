@@ -10,14 +10,16 @@ RUN npm run build
 
 FROM node:23-slim
 
+ENV APP_ENV=production
+
 WORKDIR /usr/src/app
 
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/package*.json ./
-COPY --from=build --chmod=744 /usr/src/app/docker-entrypoint.sh ./docker-entrypoint.sh
+COPY --from=build /usr/src/app/docker-entrypoint.sh ./docker-entrypoint.sh
 
-ENV APP_ENV=production
+RUN chmod +x ./docker-entrypoint.sh
 
 ENTRYPOINT [ "./docker-entrypoint.sh" ]
 
