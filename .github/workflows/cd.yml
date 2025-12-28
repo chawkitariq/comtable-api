@@ -9,7 +9,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     permissions:
@@ -44,7 +44,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   deploy:
-    needs: build
+    needs: build-and-push
 
     runs-on: ubuntu-latest
 
@@ -60,14 +60,14 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.IAM_ROLE }}
-          aws-region: ${{ secrets.REGION }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: ECS deployment
         run: |
           aws ecs update-service \
             --cluster ${{ secrets.ECS_CLUSTER }} \
             --service ${{ secrets.ECS_SERVICE }} \
-            --region ${{ secrets.REGION }} \
+            --region ${{ secrets.AWS_REGION }} \
             --force-new-deployment
 
       - name: Wait for service stability
@@ -75,4 +75,4 @@ jobs:
           aws ecs wait services-stable \
             --cluster ${{ secrets.ECS_CLUSTER }} \
             --services ${{ secrets.ECS_SERVICE }} \
-            --region ${{ secrets.REGION }}
+            --region ${{ secrets.AWS_REGION }}

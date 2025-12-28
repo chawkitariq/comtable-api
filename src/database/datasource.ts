@@ -1,6 +1,5 @@
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
-import { isProduction } from 'src/app.constant';
 import { DataSource } from 'typeorm';
 
 ConfigModule.forRoot();
@@ -14,10 +13,8 @@ const datasource = new DataSource({
   database: process.env.DB_DATABASE,
   entities: [join(__dirname, '../**/*.entity.{ts,js}')],
   migrations: [join(__dirname, './migrations/**/*.{ts,js}')],
-  synchronize: false,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  synchronize: process.env.DB_SYNCHRONIZE === 'true',
+  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
 });
 
 export default datasource;

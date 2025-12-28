@@ -12,9 +12,11 @@ services:
       POSTGRES_DATABASE: comtable
 
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: docker/local/Dockerfile
     volumes:
-      - "./:/home/node/api"
+      - "./:/app"
     ports:
       - "3000:3000"
     command: npm run start:dev
